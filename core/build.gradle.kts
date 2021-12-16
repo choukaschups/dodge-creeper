@@ -1,21 +1,11 @@
-import fr.il_totore.manadrop.MinecraftRepositoryHelper.paperPublic
-
 plugins {
-    java
+    id("dodgecreeper.java-conventions")
     id("fr.il_totore.manadrop") version "0.4.1-SNAPSHOT"
     id("com.github.johnrengelman.shadow") version "7.1.0"
 }
 
-group = "me.choukas"
-version = "1.0-SNAPSHOT"
-
-repositories {
-    paperPublic()
-}
-
 dependencies {
-    // Paper API
-    compileOnly("org.github.paperspigot:paperspigot-api:1.8.8-R0.1-SNAPSHOT")
+    implementation(project(":api"))
 }
 
 spigot {

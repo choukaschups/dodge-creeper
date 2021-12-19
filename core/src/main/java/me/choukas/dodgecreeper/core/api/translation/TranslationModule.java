@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.throwingproviders.CheckedProvides;
 import com.google.inject.throwingproviders.ThrowingProviderBinder;
+import me.choukas.dodgecreeper.api.translation.TranslationRegisterer;
 import me.choukas.dodgecreeper.core.DataFolder;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.translation.GlobalTranslator;
@@ -28,6 +29,8 @@ public class TranslationModule extends AbstractModule {
     @Override
     protected void configure() {
         install(ThrowingProviderBinder.forModule(this));
+
+        bind(TranslationRegisterer.class).to(TranslationRegistererImpl.class);
     }
 
     @Provides

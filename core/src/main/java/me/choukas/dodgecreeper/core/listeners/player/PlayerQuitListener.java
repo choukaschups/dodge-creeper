@@ -45,7 +45,7 @@ public class PlayerQuitListener implements Listener {
             }
         }
 
-        this.game.removePlayer(uuid);
+        this.game.remove(uuid);
 
         this.game.getConnected().forEach(player -> {
             Audience audience = this.audiences.player(player);

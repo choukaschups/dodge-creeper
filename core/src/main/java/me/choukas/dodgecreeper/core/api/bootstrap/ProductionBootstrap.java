@@ -5,12 +5,12 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
 import fr.minuskube.inv.InventoryManager;
+import me.choukas.dodgecreeper.api.listener.ListenerRegisterer;
+import me.choukas.dodgecreeper.api.translation.TranslationRegisterer;
 import me.choukas.dodgecreeper.api.world.WorldManager;
 import me.choukas.dodgecreeper.core.CoreModule;
 import me.choukas.dodgecreeper.core.api.APIModule;
 import me.choukas.dodgecreeper.core.api.BukkitModule;
-import me.choukas.dodgecreeper.core.api.listener.ListenerRegisterer;
-import me.choukas.dodgecreeper.core.api.translation.TranslationRegisterer;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ProductionBootstrap implements Bootstrap {

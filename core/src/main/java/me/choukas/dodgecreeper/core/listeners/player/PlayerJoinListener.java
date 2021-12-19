@@ -5,11 +5,13 @@ import me.choukas.dodgecreeper.api.game.Game;
 import me.choukas.dodgecreeper.core.Configuration;
 import me.choukas.dodgecreeper.core.ConfigurationKeys;
 import me.choukas.dodgecreeper.core.Messages;
+import me.choukas.dodgecreeper.core.api.utils.ConfigurationUtils;
 import me.choukas.dodgecreeper.core.items.InstanceMenuItem;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,18 +29,21 @@ public class PlayerJoinListener implements Listener {
     private final AutoStartManager autoStartManager;
     private final BukkitAudiences audiences;
     private final InstanceMenuItem instanceMenuItem;
+    private final ConfigurationUtils configurationUtils;
 
     @Inject
     public PlayerJoinListener(@Configuration FileConfiguration configuration,
                               Game game,
                               AutoStartManager autoStartManager,
                               BukkitAudiences audiences,
-                              InstanceMenuItem instanceMenuItem) {
+                              InstanceMenuItem instanceMenuItem,
+                              ConfigurationUtils configurationUtils) {
         this.configuration = configuration;
         this.game = game;
         this.autoStartManager = autoStartManager;
         this.audiences = audiences;
         this.instanceMenuItem = instanceMenuItem;
+        this.configurationUtils = configurationUtils;
     }
 
     @EventHandler
@@ -51,6 +56,9 @@ public class PlayerJoinListener implements Listener {
         Audience joinerAudience = this.audiences.player(joiner.getUniqueId());
 
         this.clean(joiner);
+
+        Location spawnLocation = this.configurationUtils.getLocation(ConfigurationKeys.HUB_SPAWN_POINT);
+        joiner.teleport(spawnLocation);
 
         if (!this.game.hasStarted() && this.game.getPlayerAmount() == this.configuration.getInt(ConfigurationKeys.MAX_PLAYERS)) {
             joinerAudience.sendMessage(Component.translatable(Messages.GAME_IS_FULL));

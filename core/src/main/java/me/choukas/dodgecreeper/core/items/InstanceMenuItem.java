@@ -9,6 +9,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -25,6 +26,7 @@ public class InstanceMenuItem {
 
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(((TextComponent) GlobalTranslator.render(Component.translatable(Messages.INSTANCE_MENU_ITEM_NAME), Locale.FRENCH)).content());
+        itemMeta.addEnchant(Enchantment.KNOCKBACK, 5, true);
         itemStack.setItemMeta(itemMeta);
 
         itemStack = NBTEditor.set(itemStack, Listener.UUID.toString(), PlayerInteractListener.LISTENER_NBT_TAG);

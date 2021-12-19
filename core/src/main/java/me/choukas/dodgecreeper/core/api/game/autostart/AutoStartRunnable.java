@@ -2,6 +2,7 @@ package me.choukas.dodgecreeper.core.api.game.autostart;
 
 import me.choukas.dodgecreeper.api.game.Game;
 import me.choukas.dodgecreeper.core.Configuration;
+import me.choukas.dodgecreeper.core.api.utils.GameConstants;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.github.paperspigot.Title;
@@ -38,6 +39,7 @@ public class AutoStartRunnable extends BukkitRunnable {
                     player.sendTitle(
                             Title.builder()
                                     .title(String.valueOf(this.timer))
+                                    .stay(this.configuration.getInt("timer.time") * GameConstants.TICKS_PER_SECOND)
                                     .build()
                     )
             );

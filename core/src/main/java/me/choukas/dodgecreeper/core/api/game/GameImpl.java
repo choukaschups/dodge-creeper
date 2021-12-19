@@ -6,7 +6,6 @@ import me.choukas.dodgecreeper.api.player.DodgeCreeperPlayer;
 import me.choukas.dodgecreeper.api.player.PlayerType;
 import me.choukas.dodgecreeper.core.api.player.DodgeCreeperPlayerImpl;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import javax.inject.Inject;
@@ -29,6 +28,11 @@ public class GameImpl implements Game {
     @Override
     public boolean hasStarted() {
         return this.state == GameState.RUNNING;
+    }
+
+    @Override
+    public void start() {
+        this.state = GameState.RUNNING;
     }
 
     @Override
@@ -68,7 +72,7 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public void removePlayer(UUID uuid) {
+    public void remove(UUID uuid) {
         this.players.remove(uuid);
     }
 }

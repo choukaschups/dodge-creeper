@@ -26,8 +26,9 @@ public class PlayerInteractListener implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
+        Action action = event.getAction();
 
-        if (item == null || !(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) || !NBTEditor.contains(item, LISTENER_NBT_TAG)) {
+        if (item == null || !(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) || !NBTEditor.contains(item, LISTENER_NBT_TAG)) {
             return;
         }
 

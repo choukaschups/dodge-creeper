@@ -1,4 +1,4 @@
-package me.choukas.dodgecreeper.core.listeners;
+package me.choukas.dodgecreeper.core.listeners.entity;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

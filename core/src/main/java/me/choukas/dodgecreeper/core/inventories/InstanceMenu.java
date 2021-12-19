@@ -18,6 +18,8 @@ import java.util.Locale;
 
 public class InstanceMenu {
 
+    private static final String MENU_ID = "instance-menu";
+
     private final InventoryManager inventoryManager;
     private final Provider provider;
 
@@ -31,15 +33,15 @@ public class InstanceMenu {
         // Note : Add the player as argument to change the menu's title according to its language
         return SmartInventory.builder()
                 .manager(this.inventoryManager)
-                .id("instance-inventory")
-                .title(((TextComponent) GlobalTranslator.render(Component.translatable("instance-switcher-menu-name"), Locale.FRENCH)).content())
+                .id(MENU_ID)
+                .title(((TextComponent) GlobalTranslator.render(Component.translatable("instance-menu-title"), Locale.FRENCH)).content())
                 .provider(this.provider)
                 .build();
     }
 
     public static class Provider implements InventoryProvider {
 
-        private final ServerManager serverManager;
+       private final ServerManager serverManager;
 
         @Inject
         public Provider(ServerManager serverManager) {

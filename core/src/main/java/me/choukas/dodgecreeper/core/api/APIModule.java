@@ -6,10 +6,11 @@ import me.choukas.dodgecreeper.core.api.game.GameModule;
 import me.choukas.dodgecreeper.core.api.server.ServerModule;
 import me.choukas.dodgecreeper.core.api.translation.TranslationModule;
 import me.choukas.dodgecreeper.core.api.item.ItemModule;
+import me.choukas.dodgecreeper.core.api.world.WorldModule;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.plugin.Plugin;
 
-public class CoreModule extends AbstractModule {
+public class APIModule extends AbstractModule {
 
     @Override
     protected void configure() {
@@ -17,6 +18,7 @@ public class CoreModule extends AbstractModule {
         install(new ItemModule());
         install(new ServerModule());
         install(new TranslationModule());
+        install(new WorldModule());
     }
 
     @Provides

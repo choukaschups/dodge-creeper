@@ -2,32 +2,28 @@ package me.choukas.dodgecreeper.core.api.game;
 
 import me.choukas.dodgecreeper.api.game.Game;
 import me.choukas.dodgecreeper.api.game.GameState;
-import me.choukas.dodgecreeper.core.items.InstanceMenuItem;
-import org.bukkit.GameMode;
+import me.choukas.dodgecreeper.api.player.DodgeCreeperPlayer;
+import me.choukas.dodgecreeper.api.player.PlayerType;
+import me.choukas.dodgecreeper.core.api.player.DodgeCreeperPlayerImpl;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameImpl implements Game {
 
-    private final InstanceMenuItem instanceSwitcherItem;
-
     private GameState state;
 
-    private final Collection<UUID> players;
-    private final Collection<UUID> spectators;
+    private final Map<UUID, DodgeCreeperPlayer> players;
 
     @Inject
-    public GameImpl(InstanceMenuItem instanceSwitcherItem) {
-        this.instanceSwitcherItem = instanceSwitcherItem;
-
+    public GameImpl() {
         this.state = GameState.WAITING;
 
-        this.players = new ArrayList<>();
-        this.spectators = new ArrayList<>();
+        this.players = new HashMap<>();
     }
 
     @Override
@@ -36,10 +32,43 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public void addSpectator(Player player) {
-        player.setGameMode(GameMode.SPECTATOR);
-        player.getInventory().setItem(8, this.instanceSwitcherItem.asItemStack());
+    public DodgeCreeperPlayer getPlayer(UUID uuid) {
+        return this.players.get(uuid);
+    }
 
-        this.spectators.add(player.getUniqueId());
+    @Override
+    public void addPlayer(Player player) {
+        this.players.put(player.getUniqueId(), new DodgeCreeperPlayerImpl(PlayerType.PLAYER));
+    }
+
+    @Override
+    public int getPlayerAmount() {
+        return (int) this.players.values().stream()
+                .filter(player -> player.getType() == PlayerType.PLAYER)
+                .count();
+    }
+
+    @Override
+    public Collection<Player> getPlayers() {
+        return this.players.keySet().stream()
+                .map(Bukkit::getPlayer)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Collection<Player> getConnected() {
+        return this.players.keySet().stream()
+                .map(Bukkit::getPlayer)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void addSpectator(Player player) {
+        this.players.put(player.getUniqueId(), new DodgeCreeperPlayerImpl(PlayerType.SPECTATOR));
+    }
+
+    @Override
+    public void removePlayer(UUID uuid) {
+        this.players.remove(uuid);
     }
 }

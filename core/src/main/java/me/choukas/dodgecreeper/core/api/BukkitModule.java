@@ -3,6 +3,7 @@ package me.choukas.dodgecreeper.core.api;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -41,5 +42,11 @@ public class BukkitModule extends AbstractModule {
     @DataFolder
     public Path provideDataFolder() {
         return this.plugin.getDataFolder().toPath();
+    }
+
+    @Provides
+    @Configuration
+    public FileConfiguration provideConfiguration() {
+        return this.plugin.getConfig();
     }
 }

@@ -23,6 +23,8 @@ public class TranslationModule extends AbstractModule {
     private static final String TRANSLATION_REGISTRY_KEY = "translation-registry";
     private static final String BUNDLE_NAME = "DodgeCreeper";
 
+    private static final Locale[] SUPPORTED_LOCALES = {Locale.FRENCH};
+
     @Override
     protected void configure() {
         install(ThrowingProviderBinder.forModule(this));
@@ -43,9 +45,10 @@ public class TranslationModule extends AbstractModule {
         URL[] urls = {translationFolderPath.toFile().toURI().toURL()};
         ClassLoader loader = new URLClassLoader(urls);
 
-        ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, Locale.FRENCH, loader, UTF8ResourceBundleControl.get());
-
-        translationRegistry.registerAll(Locale.FRENCH, bundle, true);
+        for (Locale locale : SUPPORTED_LOCALES) {
+            ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, locale, loader, UTF8ResourceBundleControl.get());
+            translationRegistry.registerAll(locale, bundle, true);
+        }
 
         return translationRegistry;
     }

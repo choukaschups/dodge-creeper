@@ -3,7 +3,7 @@ package me.choukas.dodgecreeper.core.items;
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import me.choukas.dodgecreeper.api.item.ItemListener;
 import me.choukas.dodgecreeper.core.inventories.InstanceMenu;
-import me.choukas.dodgecreeper.core.listeners.PlayerInteractListener;
+import me.choukas.dodgecreeper.core.listeners.player.PlayerInteractListener;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.translation.GlobalTranslator;
@@ -13,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -24,10 +23,10 @@ public class InstanceMenuItem {
         ItemStack itemStack = new ItemStack(Material.BLAZE_ROD);
 
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(((TextComponent) GlobalTranslator.render(Component.translatable("instance-switcher-name"), Locale.FRENCH)).content());
+        itemMeta.setDisplayName(((TextComponent) GlobalTranslator.render(Component.translatable("instance-menu-item-name"), Locale.FRENCH)).content());
         itemStack.setItemMeta(itemMeta);
 
-        itemStack = NBTEditor.set(itemStack, Listener.UUID.toString(), PlayerInteractListener.NBT_LISTENER_TAG);
+        itemStack = NBTEditor.set(itemStack, Listener.UUID.toString(), PlayerInteractListener.LISTENER_NBT_TAG);
 
         return itemStack;
     }

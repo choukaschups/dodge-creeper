@@ -1,10 +1,11 @@
-package me.choukas.dodgecreeper.core.listeners;
+package me.choukas.dodgecreeper.core.listeners.player;
 
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import me.choukas.dodgecreeper.api.item.ItemListenerManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,7 +14,7 @@ import java.util.UUID;
 
 public class PlayerInteractListener implements Listener {
 
-    public static final String NBT_LISTENER_TAG = "listener";
+    public static final String LISTENER_NBT_TAG = "listener";
 
     private final ItemListenerManager itemListenerManager;
 
@@ -26,13 +27,13 @@ public class PlayerInteractListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
 
-        if (!NBTEditor.contains(item, NBT_LISTENER_TAG)) {
+        if (item == null || !(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) || !NBTEditor.contains(item, LISTENER_NBT_TAG)) {
             return;
         }
 
         Player player = event.getPlayer();
 
-        UUID uuid = UUID.fromString(NBTEditor.getString(item, NBT_LISTENER_TAG));
+        UUID uuid = UUID.fromString(NBTEditor.getString(item, LISTENER_NBT_TAG));
         this.itemListenerManager.getItemListener(uuid).onRightClick(player);
     }
 }

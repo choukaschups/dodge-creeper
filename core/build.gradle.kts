@@ -35,8 +35,6 @@ dependencies {
     implementation(group = "net.kyori", name = "adventure-platform-bukkit", version = "4.0.1")
 
     // Guice
-    // implementation(group = "com.google.inject", name = "guice", version = "5.0.1")
-    // implementation(group = "com.google.inject.extensions", name = "guice-throwingproviders", version = "5.0.1")
     implementation(group = "com.google.inject", name = "guice", version = "4.1.0")
     implementation(group = "com.google.inject.extensions", name = "guice-throwingproviders", version = "4.1.0")
     implementation("com.google.inject.extensions:guice-multibindings:4.1.0")
@@ -52,8 +50,8 @@ dependencies {
 spigot {
     desc {
         named(project.properties["plugin-name"].toString())
-        authors("Choukas")
-        main("me.choukas.dodgecreeper.core.DodgeCreeperPlugin")
+        authors(project.properties["plugin-author"].toString())
+        main(project.properties["plugin-main-class"].toString())
     }
 }
 
@@ -62,8 +60,6 @@ tasks.processResources {
 }
 
 tasks.shadowJar {
-    // relocate("com.google.guava", "me.choukas.dodgecreeper.libs.com.google.guava")
-
     archiveFileName.set("${project.properties["plugin-name"].toString()}.jar")
     destinationDirectory.set(file(System.getenv("SERVER_PLUGINS_FOLDER")))
 }

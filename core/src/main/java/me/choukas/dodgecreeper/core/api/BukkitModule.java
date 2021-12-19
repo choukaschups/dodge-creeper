@@ -2,6 +2,8 @@ package me.choukas.dodgecreeper.core.api;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import me.choukas.dodgecreeper.core.Configuration;
+import me.choukas.dodgecreeper.core.DataFolder;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;

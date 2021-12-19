@@ -1,4 +1,4 @@
-package me.choukas.dodgecreeper.core.api;
+package me.choukas.dodgecreeper.core;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.Retention;

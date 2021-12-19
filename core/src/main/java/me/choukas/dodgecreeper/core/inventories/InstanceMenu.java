@@ -6,6 +6,7 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import me.choukas.dodgecreeper.api.server.ServerManager;
+import me.choukas.dodgecreeper.core.Messages;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.translation.GlobalTranslator;
@@ -34,14 +35,14 @@ public class InstanceMenu {
         return SmartInventory.builder()
                 .manager(this.inventoryManager)
                 .id(MENU_ID)
-                .title(((TextComponent) GlobalTranslator.render(Component.translatable("instance-menu-title"), Locale.FRENCH)).content())
+                .title(((TextComponent) GlobalTranslator.render(Component.translatable(Messages.INSTANCE_MENU_TITLE), Locale.FRENCH)).content())
                 .provider(this.provider)
                 .build();
     }
 
     public static class Provider implements InventoryProvider {
 
-       private final ServerManager serverManager;
+        private final ServerManager serverManager;
 
         @Inject
         public Provider(ServerManager serverManager) {

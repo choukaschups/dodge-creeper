@@ -2,6 +2,7 @@ package me.choukas.dodgecreeper.core.items;
 
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import me.choukas.dodgecreeper.api.item.ItemListener;
+import me.choukas.dodgecreeper.core.Messages;
 import me.choukas.dodgecreeper.core.inventories.InstanceMenu;
 import me.choukas.dodgecreeper.core.listeners.player.PlayerInteractListener;
 import net.kyori.adventure.text.Component;
@@ -23,7 +24,7 @@ public class InstanceMenuItem {
         ItemStack itemStack = new ItemStack(Material.BLAZE_ROD);
 
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(((TextComponent) GlobalTranslator.render(Component.translatable("instance-menu-item-name"), Locale.FRENCH)).content());
+        itemMeta.setDisplayName(((TextComponent) GlobalTranslator.render(Component.translatable(Messages.INSTANCE_MENU_ITEM_NAME), Locale.FRENCH)).content());
         itemStack.setItemMeta(itemMeta);
 
         itemStack = NBTEditor.set(itemStack, Listener.UUID.toString(), PlayerInteractListener.LISTENER_NBT_TAG);

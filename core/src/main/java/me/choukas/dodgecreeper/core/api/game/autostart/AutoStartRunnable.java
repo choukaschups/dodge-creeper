@@ -1,7 +1,7 @@
 package me.choukas.dodgecreeper.core.api.game.autostart;
 
 import me.choukas.dodgecreeper.api.game.Game;
-import me.choukas.dodgecreeper.core.api.Configuration;
+import me.choukas.dodgecreeper.core.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.github.paperspigot.Title;

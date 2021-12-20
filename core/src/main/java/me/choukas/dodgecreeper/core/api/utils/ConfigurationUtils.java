@@ -1,6 +1,7 @@
 package me.choukas.dodgecreeper.core.api.utils;
 
 import me.choukas.dodgecreeper.api.world.WorldManager;
+import me.choukas.dodgecreeper.core.Configuration;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -13,7 +14,7 @@ public class ConfigurationUtils {
     private final WorldManager worldManager;
 
     @Inject
-    public ConfigurationUtils(FileConfiguration configuration, WorldManager worldManager) {
+    public ConfigurationUtils(@Configuration FileConfiguration configuration, WorldManager worldManager) {
         this.configuration = configuration;
         this.worldManager = worldManager;
     }

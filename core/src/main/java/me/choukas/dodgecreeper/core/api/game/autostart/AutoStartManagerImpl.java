@@ -16,17 +16,19 @@ public class AutoStartManagerImpl implements AutoStartManager {
     private final FileConfiguration configuration;
     private final Game game;
     private final Plugin plugin;
-    private final AutoStartRunnable runnable;
+    private final AutoStartRunnableFactory runnableFactory;
+
+    private AutoStartRunnable runnable;
 
     @Inject
     public AutoStartManagerImpl(@Configuration FileConfiguration configuration,
                                 Game game,
                                 Plugin plugin,
-                                AutoStartRunnable runnable) {
+                                AutoStartRunnableFactory runnableFactory) {
         this.configuration = configuration;
         this.game = game;
         this.plugin = plugin;
-        this.runnable = runnable;
+        this.runnableFactory = runnableFactory;
     }
 
     @Override
@@ -38,6 +40,7 @@ public class AutoStartManagerImpl implements AutoStartManager {
         // - Si oui : On passe au temps du pallier (seulement si le timer est supérieur à ce temps)
 
         if (this.game.getPlayerAmount() == this.configuration.getInt(ConfigurationKeys.MIN_PLAYERS)) {
+            this.runnable = this.runnableFactory.createAutoStartRunnable();
             this.runnable.runTaskTimer(this.plugin, 0, AUTO_START_TASK_PERIOD);
 
             return;
@@ -69,6 +72,11 @@ public class AutoStartManagerImpl implements AutoStartManager {
 
         if (this.game.getPlayerAmount() == this.configuration.getInt(ConfigurationKeys.MIN_PLAYERS)) {
             this.runnable.cancel();
+
+            this.game.getPlayers().forEach(player -> {
+                player.setLevel(0);
+                player.resetTitle();
+            });
         }
     }
 }

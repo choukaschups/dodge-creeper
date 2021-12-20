@@ -5,6 +5,7 @@ import me.choukas.dodgecreeper.api.game.Game;
 import me.choukas.dodgecreeper.api.player.DodgeCreeperPlayer;
 import me.choukas.dodgecreeper.api.player.PlayerType;
 import me.choukas.dodgecreeper.core.Messages;
+import me.choukas.dodgecreeper.core.api.scoreboard.ScoreboardManager;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -21,14 +22,17 @@ public class PlayerQuitListener implements Listener {
     private final Game game;
     private final AutoStartManager autoStartManager;
     private final BukkitAudiences audiences;
+    private final ScoreboardManager scoreboardManager;
 
     @Inject
     public PlayerQuitListener(Game game,
                               AutoStartManager autoStartManager,
-                              BukkitAudiences audiences) {
+                              BukkitAudiences audiences,
+                              ScoreboardManager scoreboardManager) {
         this.game = game;
         this.autoStartManager = autoStartManager;
         this.audiences = audiences;
+        this.scoreboardManager = scoreboardManager;
     }
 
     @EventHandler
@@ -46,6 +50,8 @@ public class PlayerQuitListener implements Listener {
         }
 
         this.game.remove(uuid);
+
+        this.scoreboardManager.removeScoreboard(uuid);
 
         this.game.getConnected().forEach(player -> {
             Audience audience = this.audiences.player(player);

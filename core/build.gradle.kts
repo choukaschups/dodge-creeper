@@ -16,11 +16,16 @@ repositories {
         name = "Jitpack repository"
         url = uri("https://jitpack.io")
     }
+
+    mavenLocal()
 }
 
 dependencies {
     // API
     implementation(project(":api"))
+
+    // NMS
+    compileOnly(group = "org.spigotmc", name = "spigot", version = "1.8.8-R0.1-SNAPSHOT")
 
     // SmartInvs
     implementation(group = "fr.minuskube.inv", name = "smart-invs", version = "1.2.7")
@@ -31,13 +36,17 @@ dependencies {
     // NBTEditor
     implementation(group = "io.github.bananapuncher714", name = "nbteditor", version = "7.18.0")
 
+    // FastBoard
+    implementation(group = "fr.mrmicky", name = "fastboard", version = "1.2.1")
+
     // Adventure API
     implementation(group = "net.kyori", name = "adventure-platform-bukkit", version = "4.0.1")
 
     // Guice
     implementation(group = "com.google.inject", name = "guice", version = "4.1.0")
+    implementation(group = "com.google.inject.extensions", name = "guice-assistedinject", version = "4.1.0")
     implementation(group = "com.google.inject.extensions", name = "guice-throwingproviders", version = "4.1.0")
-    implementation("com.google.inject.extensions:guice-multibindings:4.1.0")
+    implementation(group = "com.google.inject.extensions", name = "guice-multibindings", version = "4.1.0")
 
     // Jupiter
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-api", version = "5.8.2")
@@ -53,6 +62,12 @@ spigot {
         authors(project.properties["plugin-author"].toString())
         main(project.properties["plugin-main-class"].toString())
     }
+}
+
+tasks.buildTools {
+    mavenPath = "/usr/local/bin/mvn"
+    versions("1.8")
+    workDir = file("/Users/Juan/dodge-creeper/")
 }
 
 tasks.processResources {

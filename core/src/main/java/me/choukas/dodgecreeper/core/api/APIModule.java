@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import me.choukas.dodgecreeper.core.api.game.GameModule;
 import me.choukas.dodgecreeper.core.api.listener.ListenerModule;
+import me.choukas.dodgecreeper.core.api.scoreboard.ScoreboardModule;
 import me.choukas.dodgecreeper.core.api.server.ServerModule;
 import me.choukas.dodgecreeper.core.api.translation.TranslationModule;
 import me.choukas.dodgecreeper.core.api.item.ItemModule;
@@ -18,6 +19,7 @@ public class APIModule extends AbstractModule {
         install(new GameModule());
         install(new ItemModule());
         install(new ListenerModule());
+        install(new ScoreboardModule());
         install(new ServerModule());
         install(new TranslationModule());
         install(new WorldModule());

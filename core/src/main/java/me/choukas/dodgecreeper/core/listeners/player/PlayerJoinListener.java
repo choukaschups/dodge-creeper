@@ -1,10 +1,13 @@
 package me.choukas.dodgecreeper.core.listeners.player;
 
-import me.choukas.dodgecreeper.api.game.autostart.AutoStartManager;
+import fr.mrmicky.fastboard.FastBoard;
 import me.choukas.dodgecreeper.api.game.Game;
+import me.choukas.dodgecreeper.api.game.autostart.AutoStartManager;
 import me.choukas.dodgecreeper.core.Configuration;
 import me.choukas.dodgecreeper.core.ConfigurationKeys;
 import me.choukas.dodgecreeper.core.Messages;
+import me.choukas.dodgecreeper.core.api.scoreboard.ScoreboardManager;
+import me.choukas.dodgecreeper.core.api.utils.AdventureUtils;
 import me.choukas.dodgecreeper.core.api.utils.ConfigurationUtils;
 import me.choukas.dodgecreeper.core.items.InstanceMenuItem;
 import net.kyori.adventure.audience.Audience;
@@ -30,6 +33,7 @@ public class PlayerJoinListener implements Listener {
     private final BukkitAudiences audiences;
     private final InstanceMenuItem instanceMenuItem;
     private final ConfigurationUtils configurationUtils;
+    private final ScoreboardManager scoreboardManager;
 
     @Inject
     public PlayerJoinListener(@Configuration FileConfiguration configuration,
@@ -37,13 +41,15 @@ public class PlayerJoinListener implements Listener {
                               AutoStartManager autoStartManager,
                               BukkitAudiences audiences,
                               InstanceMenuItem instanceMenuItem,
-                              ConfigurationUtils configurationUtils) {
+                              ConfigurationUtils configurationUtils,
+                              ScoreboardManager scoreboardManager) {
         this.configuration = configuration;
         this.game = game;
         this.autoStartManager = autoStartManager;
         this.audiences = audiences;
         this.instanceMenuItem = instanceMenuItem;
         this.configurationUtils = configurationUtils;
+        this.scoreboardManager = scoreboardManager;
     }
 
     @EventHandler
@@ -59,6 +65,10 @@ public class PlayerJoinListener implements Listener {
 
         Location spawnLocation = this.configurationUtils.getLocation(ConfigurationKeys.HUB_SPAWN_POINT);
         joiner.teleport(spawnLocation);
+
+        FastBoard board = this.scoreboardManager.addScoreboard(joiner);
+        board.updateTitle(AdventureUtils.fromAdventureToVanilla(Component.translatable(Messages.SCOREBOARD_TITLE)));
+        board.updateLine(1, AdventureUtils.fromAdventureToVanilla(Component.translatable(Messages.SERVER_IP)));
 
         if (!this.game.hasStarted() && this.game.getPlayerAmount() == this.configuration.getInt(ConfigurationKeys.MAX_PLAYERS)) {
             joinerAudience.sendMessage(Component.translatable(Messages.GAME_IS_FULL));

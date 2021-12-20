@@ -3,19 +3,16 @@ package me.choukas.dodgecreeper.core.items;
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import me.choukas.dodgecreeper.api.item.ItemListener;
 import me.choukas.dodgecreeper.core.Messages;
+import me.choukas.dodgecreeper.core.api.utils.AdventureUtils;
 import me.choukas.dodgecreeper.core.inventories.InstanceMenu;
 import me.choukas.dodgecreeper.core.listeners.player.PlayerInteractListener;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.inject.Inject;
-import java.util.Locale;
 import java.util.UUID;
 
 public class InstanceMenuItem {
@@ -25,8 +22,7 @@ public class InstanceMenuItem {
         ItemStack itemStack = new ItemStack(Material.BLAZE_ROD);
 
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(((TextComponent) GlobalTranslator.render(Component.translatable(Messages.INSTANCE_MENU_ITEM_NAME), Locale.FRENCH)).content());
-        itemMeta.addEnchant(Enchantment.KNOCKBACK, 5, true);
+        itemMeta.setDisplayName(AdventureUtils.fromAdventureToVanilla(Component.translatable(Messages.INSTANCE_MENU_ITEM_NAME)));
         itemStack.setItemMeta(itemMeta);
 
         itemStack = NBTEditor.set(itemStack, Listener.UUID.toString(), PlayerInteractListener.LISTENER_NBT_TAG);

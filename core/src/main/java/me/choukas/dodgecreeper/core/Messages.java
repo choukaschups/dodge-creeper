@@ -10,10 +10,14 @@ public enum Messages implements Translatable {
     GAME_WAITING_REMAIN_PLAYER_AMOUNT("game-waiting-remain-player-amount"),
     GAME_WAITING_PLAYER_JOIN("game-waiting-player-join"),
     GAME_WAITING_PLAYER_LEAVE("game-waiting-player-leave"),
-    GAME_START_TITLE("game-start-tile"),
+    GAME_WAITING_START_TIMER("game-waiting-start-timer"),
+    GAME_START_TITLE("game-start-title"),
     INSTANCE_MENU_ITEM_NAME("instance-menu-item-name"),
     INSTANCE_MENU_TITLE("instance-menu-title"),
-    PUSHER_NAME("pusher-name");
+    PUSHER_NAME("pusher-name"),
+    SCOREBOARD_TITLE("scoreboard-title"),
+    SERVER_IP("server-ip"),
+    REMAINING_PLAYER_AMOUNT("remaining-player-amount");
 
     private final String key;
 

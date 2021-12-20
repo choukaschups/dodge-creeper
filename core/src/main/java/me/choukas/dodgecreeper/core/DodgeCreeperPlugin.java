@@ -2,13 +2,12 @@ package me.choukas.dodgecreeper.core;
 
 import com.google.inject.CreationException;
 import com.google.inject.Injector;
-import me.choukas.dodgecreeper.core.api.bootstrap.ProductionBootstrap;
+import me.choukas.dodgecreeper.core.api.bootstrap.Bootstrap;
 import me.choukas.dodgecreeper.core.api.shutdown.ShutdownHooks;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Optional;
 
-@SuppressWarnings("unused")
 public class DodgeCreeperPlugin extends JavaPlugin {
 
     private ShutdownHooks hooks;
@@ -16,7 +15,7 @@ public class DodgeCreeperPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         try {
-            Injector injector = new ProductionBootstrap()
+            Injector injector = new Bootstrap()
                     .bootstrap(this);
 
             this.hooks = injector.getInstance(ShutdownHooks.class);
@@ -31,6 +30,7 @@ public class DodgeCreeperPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        // TODO Fix exception when error on injector creation
         Optional.ofNullable(this.hooks).ifPresent(ShutdownHooks::shutdown);
 
         this.getLogger().info("Plugin successfully disabled");

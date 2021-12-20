@@ -2,10 +2,10 @@ package me.choukas.dodgecreeper.core.items;
 
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import me.choukas.dodgecreeper.api.item.ItemListener;
-import me.choukas.dodgecreeper.core.Messages;
+import me.choukas.dodgecreeper.api.translation.Translator;
+import me.choukas.dodgecreeper.core.api.translation.Messages;
 import me.choukas.dodgecreeper.core.inventories.InstanceMenu;
 import me.choukas.dodgecreeper.core.listeners.player.PlayerInteractListener;
-import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,13 +17,19 @@ import java.util.UUID;
 
 public class InstanceMenuItem {
 
-    public ItemStack asItemStack() {
-        // Note : Add a player as argument to change the item's name according to its language
+    private final Translator translator;
+
+    @Inject
+    public InstanceMenuItem(Translator translator) {
+        this.translator = translator;
+    }
+
+    public ItemStack asItemStack(Player owner) {
         ItemStack itemStack = new ItemStack(Material.BLAZE_ROD);
 
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(
-                BukkitComponentSerializer.legacy().serialize(
+                this.translator.translate(owner,
                         Component.translatable(Messages.INSTANCE_MENU_ITEM_NAME)
                 )
         );
@@ -47,7 +53,8 @@ public class InstanceMenuItem {
 
         @Override
         public void onRightClick(Player player) {
-            this.instanceMenu.asSmartInventory().open(player);
+            this.instanceMenu.asSmartInventory(player)
+                    .open(player);
         }
     }
 }

@@ -1,4 +1,4 @@
-package me.choukas.dodgecreeper.core;
+package me.choukas.dodgecreeper.core.api.translation;
 
 import net.kyori.adventure.translation.Translatable;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,10 @@ public enum Messages implements Translatable {
     PUSHER_NAME("pusher-name"),
     SCOREBOARD_TITLE("scoreboard-title"),
     SERVER_IP("server-ip"),
-    REMAINING_PLAYER_AMOUNT("remaining-player-amount");
+    REMAINING_PLAYER_AMOUNT("remaining-player-amount"),
+    DEATH_TITLE("death-title"),
+    DEATH_BROADCAST("death-broadcast"),
+    WIN("win");
 
     private final String key;
 

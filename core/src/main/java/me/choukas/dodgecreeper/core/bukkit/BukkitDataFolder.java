@@ -1,4 +1,4 @@
-package me.choukas.dodgecreeper.core;
+package me.choukas.dodgecreeper.core.bukkit;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.Retention;
@@ -6,6 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Configuration {
+public @interface BukkitDataFolder {
 
 }

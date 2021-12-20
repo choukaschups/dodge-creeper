@@ -5,7 +5,8 @@ import com.google.inject.Provides;
 import com.google.inject.throwingproviders.CheckedProvides;
 import com.google.inject.throwingproviders.ThrowingProviderBinder;
 import me.choukas.dodgecreeper.api.translation.TranslationRegisterer;
-import me.choukas.dodgecreeper.core.DataFolder;
+import me.choukas.dodgecreeper.api.translation.Translator;
+import me.choukas.dodgecreeper.core.bukkit.BukkitDataFolder;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
@@ -31,6 +32,7 @@ public class TranslationModule extends AbstractModule {
         install(ThrowingProviderBinder.forModule(this));
 
         bind(TranslationRegisterer.class).to(TranslationRegistererImpl.class);
+        bind(Translator.class).to(TranslatorImpl.class);
     }
 
     @Provides
@@ -39,7 +41,7 @@ public class TranslationModule extends AbstractModule {
     }
 
     @CheckedProvides(TranslationRegistryProvider.class)
-    public TranslationRegistry provideTranslationRegistry(@DataFolder Path dataFolder) throws IOException {
+    public TranslationRegistry provideTranslationRegistry(@BukkitDataFolder Path dataFolder) throws IOException {
         TranslationRegistry translationRegistry = TranslationRegistry.create(Key.key(TRANSLATION_REGISTRY_KEY));
         translationRegistry.defaultLocale(Locale.FRENCH);
 

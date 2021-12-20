@@ -1,9 +1,7 @@
 package me.choukas.dodgecreeper.core.listeners.entity;
 
 import me.choukas.dodgecreeper.api.game.Game;
-import me.choukas.dodgecreeper.core.ConfigurationKeys;
-import me.choukas.dodgecreeper.core.api.utils.ConfigurationUtils;
-import org.bukkit.Location;
+import me.choukas.dodgecreeper.api.game.death.DeathManager;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,12 +13,12 @@ import javax.inject.Inject;
 public class EntityDamageListener implements Listener {
 
     private final Game game;
-    private final ConfigurationUtils configurationUtils;
+    private final DeathManager deathManager;
 
     @Inject
-    public EntityDamageListener(Game game, ConfigurationUtils configurationUtils) {
+    public EntityDamageListener(Game game, DeathManager deathManager) {
         this.game = game;
-        this.configurationUtils = configurationUtils;
+        this.deathManager = deathManager;
     }
 
     @EventHandler
@@ -28,7 +26,7 @@ public class EntityDamageListener implements Listener {
         EntityType entityType = event.getEntityType();
 
         if (entityType == EntityType.PLAYER) {
-            if (!this.game.hasStarted()) {
+            if (!this.game.isRunning()) {
                 event.setCancelled(true);
 
                 return;
@@ -36,11 +34,7 @@ public class EntityDamageListener implements Listener {
 
             Player damaged = (Player) event.getEntity();
             if (damaged.getHealth() - event.getDamage() <= 0) {
-                // TODO : Death
-                damaged.setHealth(damaged.getMaxHealth());
-
-                Location deathPoint = this.configurationUtils.getLocation(ConfigurationKeys.DEATH_SPAWN_POINT);
-                damaged.teleport(deathPoint);
+                this.deathManager.death(damaged);
 
                 event.setCancelled(true);
             }

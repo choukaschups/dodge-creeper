@@ -4,7 +4,7 @@ import me.choukas.dodgecreeper.api.game.autostart.AutoStartManager;
 import me.choukas.dodgecreeper.api.game.Game;
 import me.choukas.dodgecreeper.api.player.DodgeCreeperPlayer;
 import me.choukas.dodgecreeper.api.player.PlayerType;
-import me.choukas.dodgecreeper.core.Messages;
+import me.choukas.dodgecreeper.core.api.translation.Messages;
 import me.choukas.dodgecreeper.core.api.scoreboard.ScoreboardManager;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -21,17 +21,17 @@ public class PlayerQuitListener implements Listener {
 
     private final Game game;
     private final AutoStartManager autoStartManager;
-    private final BukkitAudiences audiences;
     private final ScoreboardManager scoreboardManager;
+    private final PlayerQuitListenerMessages messages;
 
     @Inject
     public PlayerQuitListener(Game game,
                               AutoStartManager autoStartManager,
-                              BukkitAudiences audiences,
-                              ScoreboardManager scoreboardManager) {
+                              ScoreboardManager scoreboardManager,
+                              PlayerQuitListenerMessages messages) {
         this.game = game;
         this.autoStartManager = autoStartManager;
-        this.audiences = audiences;
+        this.messages = messages;
         this.scoreboardManager = scoreboardManager;
     }
 
@@ -44,7 +44,7 @@ public class PlayerQuitListener implements Listener {
         DodgeCreeperPlayer dodgeLeaver = this.game.getPlayer(uuid);
 
         if (dodgeLeaver.getType() == PlayerType.PLAYER) {
-            if (!this.game.hasStarted()) {
+            if (this.game.isWaiting()) {
                 this.autoStartManager.disconnect();
             }
         }
@@ -53,12 +53,28 @@ public class PlayerQuitListener implements Listener {
 
         this.scoreboardManager.removeScoreboard(uuid);
 
-        this.game.getConnected().forEach(player -> {
-            Audience audience = this.audiences.player(player);
-            audience.sendMessage(
-                    Component.translatable(Messages.GAME_WAITING_PLAYER_LEAVE)
-                            .args(Component.text(leaver.getDisplayName()))
-            );
-        });
+        this.messages.broadcastLeave(leaver);
+    }
+
+    private static class PlayerQuitListenerMessages {
+
+        private final Game game;
+        private final BukkitAudiences audiences;
+
+        @Inject
+        public PlayerQuitListenerMessages(Game game, BukkitAudiences audiences) {
+            this.game = game;
+            this.audiences = audiences;
+        }
+
+        public void broadcastLeave(Player leaver) {
+            this.game.getConnected().forEach(player -> {
+                Audience audience = this.audiences.player(player);
+                audience.sendMessage(
+                        Component.translatable(Messages.GAME_WAITING_PLAYER_LEAVE)
+                                .args(Component.text(leaver.getDisplayName()))
+                );
+            });
+        }
     }
 }

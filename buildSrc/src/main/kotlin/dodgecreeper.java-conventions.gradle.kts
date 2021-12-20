@@ -15,4 +15,7 @@ repositories {
 dependencies {
     // Paper API
     compileOnly(group = "org.github.paperspigot", name = "paperspigot-api", version = "1.8.8-R0.1-SNAPSHOT")
+
+    // Adventure API
+    implementation(group = "net.kyori", name = "adventure-platform-bukkit", version = "4.0.1")
 }

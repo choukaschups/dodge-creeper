@@ -15,19 +15,27 @@ import java.util.stream.Collectors;
 public class GameImpl implements Game {
 
     private GameState state;
-
     private final Map<UUID, DodgeCreeperPlayer> players;
 
     @Inject
     public GameImpl() {
         this.state = GameState.WAITING;
-
         this.players = new HashMap<>();
     }
 
     @Override
-    public boolean hasStarted() {
+    public boolean isRunning() {
         return this.state == GameState.RUNNING;
+    }
+
+    @Override
+    public boolean isWaiting() {
+        return this.state == GameState.WAITING;
+    }
+
+    @Override
+    public boolean isFinish() {
+        return this.state == GameState.FINISH;
     }
 
     @Override
@@ -53,7 +61,7 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public Collection<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return this.players.keySet().stream()
                 .map(Bukkit::getPlayer)
                 .collect(Collectors.toList());
@@ -74,5 +82,10 @@ public class GameImpl implements Game {
     @Override
     public void remove(UUID uuid) {
         this.players.remove(uuid);
+    }
+
+    @Override
+    public void finish() {
+        this.state = GameState.FINISH;
     }
 }

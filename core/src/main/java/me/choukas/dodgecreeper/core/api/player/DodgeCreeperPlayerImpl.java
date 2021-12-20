@@ -15,4 +15,9 @@ public class DodgeCreeperPlayerImpl implements DodgeCreeperPlayer {
     public PlayerType getType() {
         return this.type;
     }
+
+    @Override
+    public void spectate() {
+        this.type = PlayerType.SPECTATOR;
+    }
 }

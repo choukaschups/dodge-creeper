@@ -4,11 +4,16 @@ import me.choukas.dodgecreeper.api.player.DodgeCreeperPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public interface Game {
 
-    boolean hasStarted();
+    boolean isRunning();
+
+    boolean isWaiting();
+
+    boolean isFinish();
 
     void start();
 
@@ -18,11 +23,13 @@ public interface Game {
 
     int getPlayerAmount();
 
-    Collection<Player> getPlayers();
+    List<Player> getPlayers();
 
     DodgeCreeperPlayer getPlayer(UUID uuid);
 
     void addSpectator(Player player);
 
     void remove(UUID uuid);
+
+    void finish();
 }

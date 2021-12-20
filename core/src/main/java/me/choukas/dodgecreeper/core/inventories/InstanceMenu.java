@@ -6,8 +6,8 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import me.choukas.dodgecreeper.api.server.ServerManager;
-import me.choukas.dodgecreeper.core.Messages;
-import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
+import me.choukas.dodgecreeper.api.translation.Translator;
+import me.choukas.dodgecreeper.core.api.translation.Messages;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -21,20 +21,23 @@ public class InstanceMenu {
 
     private final InventoryManager inventoryManager;
     private final Provider provider;
+    private final Translator translator;
 
     @Inject
-    public InstanceMenu(InventoryManager inventoryManager, Provider provider) {
+    public InstanceMenu(InventoryManager inventoryManager,
+                        Provider provider,
+                        Translator translator) {
         this.inventoryManager = inventoryManager;
         this.provider = provider;
+        this.translator = translator;
     }
 
-    public SmartInventory asSmartInventory() {
-        // Note : Add the player as argument to change the menu's title according to its language
+    public SmartInventory asSmartInventory(Player player) {
         return SmartInventory.builder()
                 .manager(this.inventoryManager)
                 .id(MENU_ID)
                 .title(
-                        BukkitComponentSerializer.legacy().serialize(
+                        this.translator.translate(player,
                                 Component.translatable(Messages.INSTANCE_MENU_TITLE)
                         )
                 )

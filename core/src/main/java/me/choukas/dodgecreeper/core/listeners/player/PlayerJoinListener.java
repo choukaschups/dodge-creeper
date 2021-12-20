@@ -1,17 +1,19 @@
 package me.choukas.dodgecreeper.core.listeners.player;
 
 import fr.mrmicky.fastboard.FastBoard;
+import me.choukas.dodgecreeper.api.configuration.Configuration;
 import me.choukas.dodgecreeper.api.game.Game;
 import me.choukas.dodgecreeper.api.game.autostart.AutoStartManager;
-import me.choukas.dodgecreeper.core.Configuration;
-import me.choukas.dodgecreeper.core.ConfigurationKeys;
-import me.choukas.dodgecreeper.core.Messages;
+import me.choukas.dodgecreeper.api.game.spectate.SpectateManager;
+import me.choukas.dodgecreeper.api.translation.Translator;
+import me.choukas.dodgecreeper.core.bukkit.BukkitConfiguration;
+import me.choukas.dodgecreeper.core.api.configuration.ConfigurationImpl;
+import me.choukas.dodgecreeper.core.api.configuration.ConfigurationKeys;
+import me.choukas.dodgecreeper.core.api.configuration.ConfigurationLocationProvider;
 import me.choukas.dodgecreeper.core.api.scoreboard.ScoreboardManager;
-import me.choukas.dodgecreeper.core.api.utils.ConfigurationUtils;
-import me.choukas.dodgecreeper.core.items.InstanceMenuItem;
+import me.choukas.dodgecreeper.core.api.translation.Messages;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -27,29 +29,23 @@ public class PlayerJoinListener implements Listener {
 
     private static final int DEFAULT_FOOD_LEVEL = 20;
 
-    private final FileConfiguration configuration;
     private final Game game;
     private final AutoStartManager autoStartManager;
-    private final BukkitAudiences audiences;
-    private final InstanceMenuItem instanceMenuItem;
-    private final ConfigurationUtils configurationUtils;
-    private final ScoreboardManager scoreboardManager;
+    private final SpectateManager spectateManager;
+    private final PlayerJoinListenerConfiguration configuration;
+    private final PlayerJoinListenerMessages messages;
 
     @Inject
-    public PlayerJoinListener(@Configuration FileConfiguration configuration,
-                              Game game,
+    public PlayerJoinListener(Game game,
                               AutoStartManager autoStartManager,
-                              BukkitAudiences audiences,
-                              InstanceMenuItem instanceMenuItem,
-                              ConfigurationUtils configurationUtils,
-                              ScoreboardManager scoreboardManager) {
-        this.configuration = configuration;
+                              SpectateManager spectateManager,
+                              PlayerJoinListenerConfiguration configuration,
+                              PlayerJoinListenerMessages messages) {
         this.game = game;
         this.autoStartManager = autoStartManager;
-        this.audiences = audiences;
-        this.instanceMenuItem = instanceMenuItem;
-        this.configurationUtils = configurationUtils;
-        this.scoreboardManager = scoreboardManager;
+        this.spectateManager = spectateManager;
+        this.configuration = configuration;
+        this.messages = messages;
     }
 
     @EventHandler
@@ -59,43 +55,26 @@ public class PlayerJoinListener implements Listener {
         event.setJoinMessage(null);
 
         Player joiner = event.getPlayer();
-        Audience joinerAudience = this.audiences.player(joiner.getUniqueId());
 
         this.clean(joiner);
 
-        Location spawnLocation = this.configurationUtils.getLocation(ConfigurationKeys.HUB_SPAWN_POINT);
-        joiner.teleport(spawnLocation);
+        Location hubSpawnLocation = this.configuration.getHubSpawnLocation();
+        joiner.teleport(hubSpawnLocation);
 
-        FastBoard board = this.scoreboardManager.addScoreboard(joiner);
-        board.updateTitle(
-                BukkitComponentSerializer.legacy().serialize(
-                        Component.translatable(Messages.SCOREBOARD_TITLE)
-                )
-        );
-        board.updateLine(1,
-                BukkitComponentSerializer.legacy().serialize(
-                        Component.translatable(Messages.SERVER_IP)
-                )
-        );
+        this.messages.printScoreboard(joiner);
 
-        if (!this.game.hasStarted() && this.game.getPlayerAmount() == this.configuration.getInt(ConfigurationKeys.MAX_PLAYERS)) {
-            joinerAudience.sendMessage(Component.translatable(Messages.GAME_IS_FULL));
-            joiner.setGameMode(GameMode.SPECTATOR);
-            joiner.getInventory().setItem(8, this.instanceMenuItem.asItemStack());
-
-            this.game.addSpectator(joiner);
+        if (this.game.isWaiting() && this.game.getPlayerAmount() == this.configuration.getMinimumPlayerAmount()) {
+            this.messages.warnGameIsFull(joiner);
+            this.spectate(joiner);
 
             return;
         }
 
-        if (this.game.hasStarted()) {
+        if (this.game.isRunning()) {
             // The game has already started
             // Adds him to the game as a spectator
-            joinerAudience.sendMessage(Component.translatable(Messages.GAME_ALREADY_STARTED));
-            joiner.setGameMode(GameMode.SPECTATOR);
-            joiner.getInventory().setItem(8, this.instanceMenuItem.asItemStack());
-
-            this.game.addSpectator(joiner);
+            this.messages.warnGameHasStarted(joiner);
+            this.spectate(joiner);
 
             return;
         }
@@ -103,29 +82,14 @@ public class PlayerJoinListener implements Listener {
         joiner.setGameMode(GameMode.SURVIVAL);
 
         this.game.addPlayer(joiner);
+
         this.autoStartManager.connect();
 
-        this.game.getConnected().forEach(player -> {
-            Audience audience = this.audiences.player(player);
-            audience.sendMessage(
-                    Component.translatable(Messages.GAME_WAITING_PLAYER_JOIN)
-                            .args(
-                                    Component.text(joiner.getDisplayName()),
-                                    Component.text(this.game.getPlayerAmount()),
-                                    Component.text(this.configuration.getInt(ConfigurationKeys.MAX_PLAYERS))
-                            )
-            );
-        });
+        this.messages.broadcastJoin(joiner);
 
-        int remainPlayerAmount = this.configuration.getInt(ConfigurationKeys.MIN_PLAYERS) - this.game.getPlayerAmount();
+        int remainPlayerAmount = this.configuration.getMinimumPlayerAmount() - this.game.getPlayerAmount();
         if (remainPlayerAmount > 0) {
-            this.game.getPlayers().forEach(player -> {
-                Audience audience = this.audiences.player(player);
-                audience.sendMessage(
-                        Component.translatable(Messages.GAME_WAITING_REMAIN_PLAYER_AMOUNT)
-                                .args(Component.text(remainPlayerAmount))
-                );
-            });
+            this.messages.broadcastRemainPlayerAmount(remainPlayerAmount);
         }
     }
 
@@ -138,5 +102,98 @@ public class PlayerJoinListener implements Listener {
 
         player.resetMaxHealth();
         player.setHealth(player.getMaxHealth());
+    }
+
+    private void spectate(Player player) {
+        this.spectateManager.spectate(player);
+        this.game.addSpectator(player);
+    }
+
+    private static class PlayerJoinListenerConfiguration extends ConfigurationImpl {
+
+        private final ConfigurationLocationProvider configurationLocationProvider;
+
+        @Inject
+        public PlayerJoinListenerConfiguration(@BukkitConfiguration FileConfiguration configuration, ConfigurationLocationProvider configurationLocationProvider) {
+            super(configuration);
+
+            this.configurationLocationProvider = configurationLocationProvider;
+        }
+
+        public Location getHubSpawnLocation() {
+            return this.configurationLocationProvider.getLocation(
+                    this.configuration.getConfigurationSection(ConfigurationKeys.HUB_SPAWN_POINT.getKey())
+            );
+        }
+    }
+
+    private static class PlayerJoinListenerMessages {
+
+        private final Game game;
+        private final ScoreboardManager scoreboardManager;
+        private final BukkitAudiences audiences;
+        private final Translator translator;
+        private final Configuration configuration;
+
+        @Inject
+        public PlayerJoinListenerMessages(Game game,
+                                          ScoreboardManager scoreboardManager,
+                                          BukkitAudiences audiences,
+                                          Translator translator,
+                                          Configuration configuration) {
+            this.game = game;
+            this.scoreboardManager = scoreboardManager;
+            this.audiences = audiences;
+            this.translator = translator;
+            this.configuration = configuration;
+        }
+
+        public void warnGameIsFull(Player joiner) {
+            Audience joinerAudience = this.audiences.player(joiner);
+            joinerAudience.sendMessage(Component.translatable(Messages.GAME_IS_FULL));
+        }
+
+        public void warnGameHasStarted(Player joiner) {
+            Audience joinerAudience = this.audiences.player(joiner);
+            joinerAudience.sendMessage(Component.translatable(Messages.GAME_ALREADY_STARTED));
+        }
+
+        public void printScoreboard(Player joiner) {
+            FastBoard board = this.scoreboardManager.addScoreboard(joiner);
+            board.updateTitle(
+                    this.translator.translate(joiner,
+                            Component.translatable(Messages.SCOREBOARD_TITLE)
+                    )
+            );
+            board.updateLine(1,
+                    this.translator.translate(joiner,
+                            Component.translatable(Messages.SERVER_IP)
+                    )
+            );
+        }
+
+        public void broadcastJoin(Player joiner) {
+            this.game.getConnected().forEach(player -> {
+                Audience audience = this.audiences.player(player);
+                audience.sendMessage(
+                        Component.translatable(Messages.GAME_WAITING_PLAYER_JOIN)
+                                .args(
+                                        Component.text(joiner.getDisplayName()),
+                                        Component.text(this.game.getPlayerAmount()),
+                                        Component.text(this.configuration.getMaximumPlayerAmount())
+                                )
+                );
+            });
+        }
+
+        public void broadcastRemainPlayerAmount(int remainPlayerAmount) {
+            this.game.getPlayers().forEach(player -> {
+                Audience audience = this.audiences.player(player);
+                audience.sendMessage(
+                        Component.translatable(Messages.GAME_WAITING_REMAIN_PLAYER_AMOUNT)
+                                .args(Component.text(remainPlayerAmount))
+                );
+            });
+        }
     }
 }

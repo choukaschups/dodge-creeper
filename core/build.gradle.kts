@@ -39,9 +39,6 @@ dependencies {
     // FastBoard
     implementation(group = "fr.mrmicky", name = "fastboard", version = "1.2.1")
 
-    // Adventure API
-    implementation(group = "net.kyori", name = "adventure-platform-bukkit", version = "4.0.1")
-
     // Guice
     implementation(group = "com.google.inject", name = "guice", version = "4.1.0")
     implementation(group = "com.google.inject.extensions", name = "guice-assistedinject", version = "4.1.0")

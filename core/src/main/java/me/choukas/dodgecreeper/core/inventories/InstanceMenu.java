@@ -7,15 +7,13 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import me.choukas.dodgecreeper.api.server.ServerManager;
 import me.choukas.dodgecreeper.core.Messages;
+import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.inject.Inject;
-import java.util.Locale;
 
 public class InstanceMenu {
 
@@ -35,7 +33,11 @@ public class InstanceMenu {
         return SmartInventory.builder()
                 .manager(this.inventoryManager)
                 .id(MENU_ID)
-                .title(((TextComponent) GlobalTranslator.render(Component.translatable(Messages.INSTANCE_MENU_TITLE), Locale.FRENCH)).content())
+                .title(
+                        BukkitComponentSerializer.legacy().serialize(
+                                Component.translatable(Messages.INSTANCE_MENU_TITLE)
+                        )
+                )
                 .provider(this.provider)
                 .build();
     }

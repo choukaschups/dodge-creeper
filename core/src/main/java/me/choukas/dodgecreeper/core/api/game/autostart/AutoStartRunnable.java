@@ -6,9 +6,10 @@ import me.choukas.dodgecreeper.api.game.GameStart;
 import me.choukas.dodgecreeper.core.Configuration;
 import me.choukas.dodgecreeper.core.Messages;
 import me.choukas.dodgecreeper.core.api.scoreboard.ScoreboardManager;
-import me.choukas.dodgecreeper.core.api.utils.AdventureUtils;
 import me.choukas.dodgecreeper.core.api.utils.GameConstants;
+import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.github.paperspigot.Title;
@@ -52,9 +53,9 @@ public class AutoStartRunnable extends BukkitRunnable {
 
             FastBoard board = this.scoreboardManager.getScoreboard(player.getUniqueId());
             board.updateLine(0,
-                    AdventureUtils.fromAdventureToVanilla(
+                    BukkitComponentSerializer.legacy().serialize(
                             Component.translatable(Messages.GAME_WAITING_START_TIMER)
-                                    .args(Component.text(this.timer))
+                                    .args(Component.text(this.timer).color(NamedTextColor.AQUA))
                     )
             );
         });

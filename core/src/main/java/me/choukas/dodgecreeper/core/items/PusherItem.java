@@ -2,7 +2,7 @@ package me.choukas.dodgecreeper.core.items;
 
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import me.choukas.dodgecreeper.core.Messages;
-import me.choukas.dodgecreeper.core.api.utils.AdventureUtils;
+import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -18,7 +18,11 @@ public class PusherItem {
         ItemStack itemStack = new ItemStack(Material.STICK);
 
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(AdventureUtils.fromAdventureToVanilla(Component.translatable(Messages.PUSHER_NAME)));
+        itemMeta.setDisplayName(
+                BukkitComponentSerializer.legacy().serialize(
+                        Component.translatable(Messages.PUSHER_NAME)
+                )
+        );
         itemMeta.addEnchant(Enchantment.KNOCKBACK, 5, true);
         itemStack.setItemMeta(itemMeta);
 

@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 
@@ -22,7 +23,7 @@ public class PlayerMoveListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
+    public void onPlayerMove(@NotNull PlayerMoveEvent event) {
         if (event.getTo().getY() <= configuration.getInt(ConfigurationKeys.HEIGHT_LIMIT)) {
             event.setCancelled(true);
 

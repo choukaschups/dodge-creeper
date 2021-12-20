@@ -6,11 +6,11 @@ import me.choukas.dodgecreeper.api.game.GameStart;
 import me.choukas.dodgecreeper.core.ConfigurationKeys;
 import me.choukas.dodgecreeper.core.Messages;
 import me.choukas.dodgecreeper.core.api.scoreboard.ScoreboardManager;
-import me.choukas.dodgecreeper.core.api.utils.AdventureUtils;
 import me.choukas.dodgecreeper.core.api.utils.ConfigurationUtils;
 import me.choukas.dodgecreeper.core.items.PusherItem;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Location;
@@ -49,7 +49,7 @@ public class GameStartImpl implements GameStart {
 
             FastBoard board = scoreboardManager.getScoreboard(player.getUniqueId());
             board.updateLine(0,
-                    AdventureUtils.fromAdventureToVanilla(
+                    BukkitComponentSerializer.legacy().serialize(
                             Component.translatable(Messages.REMAINING_PLAYER_AMOUNT)
                                     .args(Component.text(this.game.getPlayerAmount()))
                     )

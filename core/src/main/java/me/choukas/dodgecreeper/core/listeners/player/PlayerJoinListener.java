@@ -7,11 +7,11 @@ import me.choukas.dodgecreeper.core.Configuration;
 import me.choukas.dodgecreeper.core.ConfigurationKeys;
 import me.choukas.dodgecreeper.core.Messages;
 import me.choukas.dodgecreeper.core.api.scoreboard.ScoreboardManager;
-import me.choukas.dodgecreeper.core.api.utils.AdventureUtils;
 import me.choukas.dodgecreeper.core.api.utils.ConfigurationUtils;
 import me.choukas.dodgecreeper.core.items.InstanceMenuItem;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -67,8 +67,16 @@ public class PlayerJoinListener implements Listener {
         joiner.teleport(spawnLocation);
 
         FastBoard board = this.scoreboardManager.addScoreboard(joiner);
-        board.updateTitle(AdventureUtils.fromAdventureToVanilla(Component.translatable(Messages.SCOREBOARD_TITLE)));
-        board.updateLine(1, AdventureUtils.fromAdventureToVanilla(Component.translatable(Messages.SERVER_IP)));
+        board.updateTitle(
+                BukkitComponentSerializer.legacy().serialize(
+                        Component.translatable(Messages.SCOREBOARD_TITLE)
+                )
+        );
+        board.updateLine(1,
+                BukkitComponentSerializer.legacy().serialize(
+                        Component.translatable(Messages.SERVER_IP)
+                )
+        );
 
         if (!this.game.hasStarted() && this.game.getPlayerAmount() == this.configuration.getInt(ConfigurationKeys.MAX_PLAYERS)) {
             joinerAudience.sendMessage(Component.translatable(Messages.GAME_IS_FULL));

@@ -30,7 +30,7 @@ public class AutoStartManagerImpl implements AutoStartManager {
     }
 
     @Override
-    public void connect() {
+    public void update() {
         if (this.game.getPlayerAmount() == this.configuration.getMinimumPlayerAmount()) {
             this.autoStartRunnable = this.autoStartRunnableFactory.createAutoStartRunnable();
             this.autoStartRunnable.runTaskTimer(this.plugin, 0, AUTO_START_TASK_PERIOD);
@@ -46,9 +46,8 @@ public class AutoStartManagerImpl implements AutoStartManager {
     }
 
     @Override
-    public void disconnect() {
-        if (this.game.getPlayerAmount() == this.configuration.getMinimumPlayerAmount()) {
-            this.autoStartRunnable.cancel();
-        }
+    public void stop() {
+        this.autoStartRunnable.cancel();
+        // TODO Maybe set autoStartRunnable to null
     }
 }

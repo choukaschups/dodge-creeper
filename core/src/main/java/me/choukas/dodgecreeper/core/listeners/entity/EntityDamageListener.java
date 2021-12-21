@@ -1,6 +1,7 @@
 package me.choukas.dodgecreeper.core.listeners.entity;
 
 import me.choukas.dodgecreeper.api.game.Game;
+import me.choukas.dodgecreeper.api.game.death.DeathCause;
 import me.choukas.dodgecreeper.api.game.death.DeathManager;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -34,7 +35,7 @@ public class EntityDamageListener implements Listener {
 
             Player damaged = (Player) event.getEntity();
             if (damaged.getHealth() - event.getDamage() <= 0) {
-                this.deathManager.death(damaged);
+                this.deathManager.death(damaged, DeathCause.EXPLOSION);
 
                 event.setCancelled(true);
             }

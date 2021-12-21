@@ -24,18 +24,13 @@ public class GameImpl implements Game {
     }
 
     @Override
+    public GameState getState() {
+        return this.state;
+    }
+
+    @Override
     public boolean isRunning() {
         return this.state == GameState.RUNNING;
-    }
-
-    @Override
-    public boolean isWaiting() {
-        return this.state == GameState.WAITING;
-    }
-
-    @Override
-    public boolean isFinish() {
-        return this.state == GameState.FINISH;
     }
 
     @Override

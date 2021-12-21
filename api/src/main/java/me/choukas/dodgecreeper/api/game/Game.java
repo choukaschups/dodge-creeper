@@ -9,11 +9,9 @@ import java.util.UUID;
 
 public interface Game {
 
+    GameState getState();
+
     boolean isRunning();
-
-    boolean isWaiting();
-
-    boolean isFinish();
 
     void start();
 

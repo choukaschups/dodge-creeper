@@ -2,6 +2,7 @@ package me.choukas.dodgecreeper.core.api.game.death;
 
 import fr.mrmicky.fastboard.FastBoard;
 import me.choukas.dodgecreeper.api.game.Game;
+import me.choukas.dodgecreeper.api.game.death.DeathCause;
 import me.choukas.dodgecreeper.api.game.death.DeathManager;
 import me.choukas.dodgecreeper.api.game.spectate.SpectateManager;
 import me.choukas.dodgecreeper.api.player.DodgeCreeperPlayer;
@@ -10,7 +11,7 @@ import me.choukas.dodgecreeper.core.api.configuration.ConfigurationKeys;
 import me.choukas.dodgecreeper.core.api.configuration.ConfigurationLocationProvider;
 import me.choukas.dodgecreeper.core.api.game.GameRunnable;
 import me.choukas.dodgecreeper.core.api.scoreboard.ScoreboardManager;
-import me.choukas.dodgecreeper.core.api.translation.Messages;
+import me.choukas.dodgecreeper.core.api.translation.TranslationKeys;
 import me.choukas.dodgecreeper.core.bukkit.BukkitConfiguration;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -45,14 +46,15 @@ public class DeathManagerImpl implements DeathManager {
     }
 
     @Override
-    public void death(Player deadPlayer) {
+    public void death(Player deadPlayer, DeathCause cause) {
         UUID deadPlayerId = deadPlayer.getUniqueId();
         DodgeCreeperPlayer deadDodgePlayer = this.game.getPlayer(deadPlayerId);
-        deadDodgePlayer.spectate();
 
+        deadDodgePlayer.spectate();
         this.spectateManager.spectate(deadPlayer);
 
         deadPlayer.setHealth(deadPlayer.getMaxHealth());
+        deadPlayer.getInventory().clear();
 
         Location spawnPoint = this.configuration.getDeathSpawnLocation();
         deadPlayer.teleport(spawnPoint);
@@ -120,7 +122,7 @@ public class DeathManagerImpl implements DeathManager {
         public void sendDeathMessage(Player player) {
             Audience deadAudience = this.audiences.player(player);
             deadAudience.sendTitlePart(TitlePart.TITLE,
-                    Component.translatable(Messages.DEATH_TITLE)
+                    Component.translatable(TranslationKeys.DEATH_TITLE)
             );
         }
 
@@ -128,7 +130,7 @@ public class DeathManagerImpl implements DeathManager {
             this.game.getConnected().forEach(player -> {
                 Audience audience = this.audiences.player(player);
                 audience.sendMessage(
-                        Component.translatable(Messages.DEATH_BROADCAST)
+                        Component.translatable(TranslationKeys.DEATH_BROADCAST)
                                 .args(Component.text(deadPlayer.getDisplayName()))
                 );
             });
@@ -139,7 +141,7 @@ public class DeathManagerImpl implements DeathManager {
                 FastBoard board = this.scoreboardManager.getScoreboard(player.getUniqueId());
                 board.updateLine(0,
                         this.translator.translate(player,
-                                Component.translatable(Messages.REMAINING_PLAYER_AMOUNT)
+                                Component.translatable(TranslationKeys.REMAINING_PLAYER_AMOUNT)
                                         .args(Component.text(this.game.getPlayerAmount()))
                         )
                 );
@@ -150,13 +152,23 @@ public class DeathManagerImpl implements DeathManager {
             this.game.getConnected().forEach(player -> {
                 FastBoard board = this.scoreboardManager.getScoreboard(player.getUniqueId());
                 board.removeLine(0);
+                board.removeLine(1);
+                board.removeLine(2);
+                board.removeLine(3);
+
+                board.updateLine(0, "");
+                board.updateLine(1,
+                        this.translator.translate(player,
+                                Component.translatable(TranslationKeys.SERVER_IP)
+                        )
+                );
             });
         }
 
         public void sendWinMessage(Player winner) {
             Audience winnerAudience = this.audiences.player(winner);
             winnerAudience.sendMessage(
-                    Component.translatable(Messages.WIN)
+                    Component.translatable(TranslationKeys.WIN)
             );
         }
     }

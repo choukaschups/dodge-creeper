@@ -3,7 +3,7 @@ package me.choukas.dodgecreeper.core.items;
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import me.choukas.dodgecreeper.api.item.ItemListener;
 import me.choukas.dodgecreeper.api.translation.Translator;
-import me.choukas.dodgecreeper.core.api.translation.Messages;
+import me.choukas.dodgecreeper.core.api.translation.TranslationKeys;
 import me.choukas.dodgecreeper.core.inventories.InstanceMenu;
 import me.choukas.dodgecreeper.core.listeners.player.PlayerInteractListener;
 import net.kyori.adventure.text.Component;
@@ -30,7 +30,7 @@ public class InstanceMenuItem {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(
                 this.translator.translate(owner,
-                        Component.translatable(Messages.INSTANCE_MENU_ITEM_NAME)
+                        Component.translatable(TranslationKeys.INSTANCE_MENU_ITEM_NAME)
                 )
         );
         itemStack.setItemMeta(itemMeta);

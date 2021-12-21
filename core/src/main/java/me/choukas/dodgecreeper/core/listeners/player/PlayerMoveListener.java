@@ -2,6 +2,7 @@ package me.choukas.dodgecreeper.core.listeners.player;
 
 import me.choukas.dodgecreeper.api.configuration.Configuration;
 import me.choukas.dodgecreeper.api.game.Game;
+import me.choukas.dodgecreeper.api.game.death.DeathCause;
 import me.choukas.dodgecreeper.api.game.death.DeathManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,7 +32,7 @@ public class PlayerMoveListener implements Listener {
             event.setCancelled(true);
 
             if (this.game.isRunning()) {
-                this.deathManager.death(event.getPlayer());
+                this.deathManager.death(event.getPlayer(), DeathCause.FALL);
             }
         }
     }

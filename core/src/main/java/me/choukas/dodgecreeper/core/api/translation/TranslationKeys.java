@@ -3,7 +3,7 @@ package me.choukas.dodgecreeper.core.api.translation;
 import net.kyori.adventure.translation.Translatable;
 import org.jetbrains.annotations.NotNull;
 
-public enum Messages implements Translatable {
+public enum TranslationKeys implements Translatable {
 
     GAME_ALREADY_STARTED("game-already-started"),
     GAME_IS_FULL("game-is-full"),
@@ -20,11 +20,12 @@ public enum Messages implements Translatable {
     REMAINING_PLAYER_AMOUNT("remaining-player-amount"),
     DEATH_TITLE("death-title"),
     DEATH_BROADCAST("death-broadcast"),
-    WIN("win");
+    WIN("win"),
+    GAME_WAITING_START_TIMER_MESSAGE("game-waiting-start-timer-message");
 
     private final String key;
 
-    Messages(String key) {
+    TranslationKeys(String key) {
         this.key = key;
     }
 

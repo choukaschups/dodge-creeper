@@ -15,11 +15,9 @@ public class ScoreboardManager {
         this.boards = new HashMap<>();
     }
 
-    public FastBoard addScoreboard(Player player) {
+    public void addScoreboard(Player player) {
         FastBoard board = new FastBoard(player);
         this.boards.put(player.getUniqueId(), board);
-
-        return board;
     }
 
     public FastBoard getScoreboard(UUID uuid) {

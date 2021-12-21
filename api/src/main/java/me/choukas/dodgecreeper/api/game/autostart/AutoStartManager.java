@@ -2,7 +2,7 @@ package me.choukas.dodgecreeper.api.game.autostart;
 
 public interface AutoStartManager {
 
-    void connect();
+    void update();
 
-    void disconnect();
+    void stop();
 }

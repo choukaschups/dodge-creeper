@@ -9,11 +9,12 @@ import me.choukas.dodgecreeper.core.api.configuration.ConfigurationImpl;
 import me.choukas.dodgecreeper.core.api.configuration.ConfigurationKeys;
 import me.choukas.dodgecreeper.core.api.configuration.ConfigurationLocationProvider;
 import me.choukas.dodgecreeper.core.api.scoreboard.ScoreboardManager;
-import me.choukas.dodgecreeper.core.api.translation.Messages;
+import me.choukas.dodgecreeper.core.api.translation.TranslationKeys;
 import me.choukas.dodgecreeper.core.items.PusherItem;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.TitlePart;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -99,14 +100,27 @@ public class GameStartImpl implements GameStart {
             this.game.getConnected().forEach(player -> {
                 Audience audience = this.audiences.player(player);
                 audience.sendTitlePart(TitlePart.TITLE,
-                        Component.translatable(Messages.GAME_START_TITLE)
+                        Component.text().color(NamedTextColor.YELLOW)
+                                .append(Component.translatable(TranslationKeys.GAME_START_TITLE))
+                                .build()
                 );
 
                 FastBoard board = scoreboardManager.getScoreboard(player.getUniqueId());
-                board.updateLine(0,
+                board.updateLine(0, "");
+                board.updateLine(1,
                         this.translator.translate(player,
-                                Component.translatable(Messages.REMAINING_PLAYER_AMOUNT)
-                                        .args(Component.text(this.game.getPlayerAmount()))
+                                Component.translatable(TranslationKeys.REMAINING_PLAYER_AMOUNT)
+                                        .args(
+                                                Component.text()
+                                                        .color(NamedTextColor.RED)
+                                                        .append(Component.text(this.game.getPlayerAmount()))
+                                        )
+                        )
+                );
+                board.updateLine(2, "");
+                board.updateLine(3,
+                        this.translator.translate(player,
+                                Component.translatable(TranslationKeys.SERVER_IP)
                         )
                 );
             });

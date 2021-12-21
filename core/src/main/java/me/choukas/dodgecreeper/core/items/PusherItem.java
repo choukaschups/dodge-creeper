@@ -2,7 +2,7 @@ package me.choukas.dodgecreeper.core.items;
 
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import me.choukas.dodgecreeper.api.translation.Translator;
-import me.choukas.dodgecreeper.core.api.translation.Messages;
+import me.choukas.dodgecreeper.core.api.translation.TranslationKeys;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -29,7 +29,7 @@ public class PusherItem {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(
                 this.translator.translate(owner,
-                        Component.translatable(Messages.PUSHER_NAME)
+                        Component.translatable(TranslationKeys.PUSHER_NAME)
                 )
         );
         itemMeta.addEnchant(Enchantment.KNOCKBACK, 5, true);

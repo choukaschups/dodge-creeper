@@ -5,6 +5,8 @@ import me.choukas.dodgecreeper.api.game.Game;
 import me.choukas.dodgecreeper.api.game.GameStart;
 import me.choukas.dodgecreeper.core.api.game.autostart.AutoStartModule;
 import me.choukas.dodgecreeper.core.api.game.death.DeathModule;
+import me.choukas.dodgecreeper.core.api.game.join.JoinModule;
+import me.choukas.dodgecreeper.core.api.game.quit.QuitModule;
 import me.choukas.dodgecreeper.core.api.game.spectate.SpectateModule;
 
 public class GameModule extends AbstractModule {
@@ -13,6 +15,8 @@ public class GameModule extends AbstractModule {
     protected void configure() {
         install(new AutoStartModule());
         install(new DeathModule());
+        install(new JoinModule());
+        install(new QuitModule());
         install(new SpectateModule());
 
         bind(Game.class).to(GameImpl.class).asEagerSingleton();

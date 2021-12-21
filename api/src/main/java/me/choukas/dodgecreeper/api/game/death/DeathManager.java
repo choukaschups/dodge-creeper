@@ -4,5 +4,5 @@ import org.bukkit.entity.Player;
 
 public interface DeathManager {
 
-    void death(Player player);
+    void death(Player player, DeathCause cause);
 }

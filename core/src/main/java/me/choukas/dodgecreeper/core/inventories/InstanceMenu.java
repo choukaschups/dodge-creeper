@@ -7,7 +7,7 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import me.choukas.dodgecreeper.api.server.ServerManager;
 import me.choukas.dodgecreeper.api.translation.Translator;
-import me.choukas.dodgecreeper.core.api.translation.Messages;
+import me.choukas.dodgecreeper.core.api.translation.TranslationKeys;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -38,7 +38,7 @@ public class InstanceMenu {
                 .id(MENU_ID)
                 .title(
                         this.translator.translate(player,
-                                Component.translatable(Messages.INSTANCE_MENU_TITLE)
+                                Component.translatable(TranslationKeys.INSTANCE_MENU_TITLE)
                         )
                 )
                 .provider(this.provider)

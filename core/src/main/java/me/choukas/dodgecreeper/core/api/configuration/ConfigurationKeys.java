@@ -14,7 +14,8 @@ public enum ConfigurationKeys {
     TIMER("timer"),
     TIMER_LEVELS("levels"),
     TIMER_PRINT("print"),
-    TIMER_STAYING_TIME("staying-time");
+    TIMER_STAYING_TIME("staying-time"),
+    DOUBLE_JUMPS_AMOUNT("double-jumps-amount");
 
     private final String key;
 

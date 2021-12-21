@@ -82,6 +82,11 @@ public class ConfigurationImpl implements Configuration {
         return this.configuration.getInt(ConfigurationKeys.HEIGHT_LIMIT.getKey());
     }
 
+    @Override
+    public int getDoubleJumpsAmount() {
+        return this.configuration.getInt(ConfigurationKeys.DOUBLE_JUMPS_AMOUNT.getKey());
+    }
+
     private ConfigurationSection getTimerSection() {
         return this.configuration.getConfigurationSection(ConfigurationKeys.TIMER.getKey());
     }

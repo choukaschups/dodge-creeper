@@ -49,21 +49,21 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public void addPlayer(Player player) {
-        this.players.put(player.getUniqueId(), new DodgeCreeperPlayerImpl(PlayerType.PLAYER));
+    public void addPlayer(Player player, int doubleJumps) {
+        this.players.put(player.getUniqueId(), new DodgeCreeperPlayerImpl(PlayerType.PLAYER, doubleJumps));
     }
 
     @Override
     public int getPlayerAmount() {
         return (int) this.players.values().stream()
-                .filter(player -> player.getType() == PlayerType.PLAYER)
+                .filter(DodgeCreeperPlayer::isPlayer)
                 .count();
     }
 
     @Override
     public List<Player> getPlayers() {
         return this.players.entrySet().stream()
-                .filter(entry -> entry.getValue().getType() == PlayerType.PLAYER)
+                .filter(entry -> entry.getValue().isPlayer())
                 .map(entry -> Bukkit.getPlayer(entry.getKey()))
                 .collect(Collectors.toList());
     }
@@ -77,7 +77,7 @@ public class GameImpl implements Game {
 
     @Override
     public void addSpectator(Player player) {
-        this.players.put(player.getUniqueId(), new DodgeCreeperPlayerImpl(PlayerType.SPECTATOR));
+        this.players.put(player.getUniqueId(), new DodgeCreeperPlayerImpl(PlayerType.SPECTATOR, 0));
     }
 
     @Override

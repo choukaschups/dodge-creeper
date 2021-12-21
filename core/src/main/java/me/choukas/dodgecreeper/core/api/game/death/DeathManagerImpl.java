@@ -67,7 +67,11 @@ public class DeathManagerImpl implements DeathManager {
             return;
         }
 
+        // Win
+
         Player winner = this.game.getPlayers().get(0);
+        winner.setAllowFlight(false);
+
         this.messages.sendWinMessage(winner);
 
         this.messages.clearScoreboard();

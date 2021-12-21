@@ -50,7 +50,8 @@ public class GameStartImpl implements GameStart {
         this.game.getPlayers().forEach(player -> {
             player.setLevel(0);
             player.teleport(spawnPoint);
-            player.getInventory().setItem(1, this.pusherItem.asItemStack(player));
+            player.getInventory().setItem(0, this.pusherItem.asItemStack(player));
+            player.setAllowFlight(true); // Double jumps
         });
 
         this.game.start();

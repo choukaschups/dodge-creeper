@@ -56,7 +56,7 @@ public class PlayerJoinListener implements Listener {
 
         Player joiner = event.getPlayer();
 
-        this.clean(joiner);
+        this.configurePlayer(joiner);
 
         Location hubSpawnLocation = this.configuration.getHubSpawnLocation();
         joiner.teleport(hubSpawnLocation);
@@ -81,7 +81,7 @@ public class PlayerJoinListener implements Listener {
 
         joiner.setGameMode(GameMode.SURVIVAL);
 
-        this.game.addPlayer(joiner);
+        this.game.addPlayer(joiner, this.configuration.getDoubleJumpsAmount());
 
         this.autoStartManager.connect();
 
@@ -93,7 +93,7 @@ public class PlayerJoinListener implements Listener {
         }
     }
 
-    private void clean(Player player) {
+    private void configurePlayer(Player player) {
         player.getInventory().clear();
 
         player.setLevel(0);

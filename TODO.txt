@@ -22,3 +22,9 @@ AutoStartManager
 
 Éventuellement téléporter si le joueur tombe et que le jeu est en attente ou finit
 (PlayerMoveListener)
+
+TODO Fix scoreboards on player quit
+
+BUGS POSSIBLES :
+- Si dans la config il n'a pas de double jumps, le joueur pourra quand même faire un petit saut avant que l'event soit vide annulé
+Correction : tester si le nombre de sauts est supérieur à 0 dans le game start

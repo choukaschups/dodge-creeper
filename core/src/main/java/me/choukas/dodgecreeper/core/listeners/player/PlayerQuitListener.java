@@ -2,12 +2,11 @@ package me.choukas.dodgecreeper.core.listeners.player;
 
 import fr.mrmicky.fastboard.FastBoard;
 import me.choukas.dodgecreeper.api.configuration.Configuration;
-import me.choukas.dodgecreeper.api.game.autostart.AutoStartManager;
 import me.choukas.dodgecreeper.api.game.Game;
+import me.choukas.dodgecreeper.api.game.autostart.AutoStartManager;
 import me.choukas.dodgecreeper.api.player.DodgeCreeperPlayer;
-import me.choukas.dodgecreeper.api.player.PlayerType;
-import me.choukas.dodgecreeper.core.api.translation.Messages;
 import me.choukas.dodgecreeper.core.api.scoreboard.ScoreboardManager;
+import me.choukas.dodgecreeper.core.api.translation.Messages;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -48,7 +47,7 @@ public class PlayerQuitListener implements Listener {
         UUID leaverId = leaver.getUniqueId();
         DodgeCreeperPlayer dodgeLeaver = this.game.getPlayer(leaverId);
 
-        if (dodgeLeaver.getType() == PlayerType.PLAYER) {
+        if (dodgeLeaver.isPlayer()) {
             if (this.game.isWaiting()) {
                 this.autoStartManager.disconnect();
 

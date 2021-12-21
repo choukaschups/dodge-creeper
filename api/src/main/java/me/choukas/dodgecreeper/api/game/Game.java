@@ -19,7 +19,7 @@ public interface Game {
 
     Collection<Player> getConnected();
 
-    void addPlayer(Player player);
+    void addPlayer(Player player, int doubleJumps);
 
     int getPlayerAmount();
 

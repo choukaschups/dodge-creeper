@@ -24,4 +24,6 @@ public interface Configuration {
     World getWorld();
 
     int getHeightLimit();
+
+    int getDoubleJumpsAmount();
 }

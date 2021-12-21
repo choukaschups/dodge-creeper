@@ -7,10 +7,7 @@ import me.choukas.dodgecreeper.core.listeners.block.BlockPlaceListener;
 import me.choukas.dodgecreeper.core.listeners.entity.EntityDamageListener;
 import me.choukas.dodgecreeper.core.listeners.entity.EntityDeathListener;
 import me.choukas.dodgecreeper.core.listeners.entity.FoodLevelChangeListener;
-import me.choukas.dodgecreeper.core.listeners.player.PlayerInteractListener;
-import me.choukas.dodgecreeper.core.listeners.player.PlayerJoinListener;
-import me.choukas.dodgecreeper.core.listeners.player.PlayerMoveListener;
-import me.choukas.dodgecreeper.core.listeners.player.PlayerQuitListener;
+import me.choukas.dodgecreeper.core.listeners.player.*;
 import me.choukas.dodgecreeper.core.listeners.weather.ThunderChangeListener;
 import me.choukas.dodgecreeper.core.listeners.weather.WeatherChangeListener;
 import org.bukkit.event.Listener;
@@ -28,6 +25,7 @@ public class ListenerModule extends AbstractModule {
         listenerBinder.addBinding().to(PlayerJoinListener.class);
         listenerBinder.addBinding().to(PlayerMoveListener.class);
         listenerBinder.addBinding().to(PlayerQuitListener.class);
+        listenerBinder.addBinding().to(PlayerToggleFlightListener.class);
 
         listenerBinder.addBinding().to(EntityDamageListener.class);
         listenerBinder.addBinding().to(EntityDeathListener.class);

@@ -10,6 +10,7 @@ import me.choukas.dodgecreeper.core.listeners.player.PlayerInteractListener;
 import me.choukas.dodgecreeper.core.listeners.player.PlayerJoinListener;
 import me.choukas.dodgecreeper.core.listeners.player.PlayerMoveListener;
 import me.choukas.dodgecreeper.core.listeners.player.PlayerQuitListener;
+import me.choukas.dodgecreeper.core.listeners.weather.ThunderChangeListener;
 import me.choukas.dodgecreeper.core.listeners.weather.WeatherChangeListener;
 import org.bukkit.event.Listener;
 
@@ -30,6 +31,7 @@ public class ListenerModule extends AbstractModule {
         listenerBinder.addBinding().to(EntityDamageListener.class);
         listenerBinder.addBinding().to(FoodLevelChangeListener.class);
 
+        listenerBinder.addBinding().to(ThunderChangeListener.class);
         listenerBinder.addBinding().to(WeatherChangeListener.class);
     }
 }

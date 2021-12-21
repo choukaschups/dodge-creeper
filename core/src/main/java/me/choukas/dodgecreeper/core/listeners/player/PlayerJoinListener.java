@@ -51,7 +51,7 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         // We do not have any control over the player's locale when the PlayerJoinEvent is fired
-        // We have to wait around 10 ticks for the server to update it
+        // We have to wait around 10 ticks for the server to update it, but fuck it, we'll display all in French
         event.setJoinMessage(null);
 
         Player joiner = event.getPlayer();

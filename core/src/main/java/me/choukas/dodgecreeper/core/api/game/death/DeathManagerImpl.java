@@ -3,14 +3,15 @@ package me.choukas.dodgecreeper.core.api.game.death;
 import fr.mrmicky.fastboard.FastBoard;
 import me.choukas.dodgecreeper.api.game.Game;
 import me.choukas.dodgecreeper.api.game.death.DeathManager;
+import me.choukas.dodgecreeper.api.game.spectate.SpectateManager;
 import me.choukas.dodgecreeper.api.player.DodgeCreeperPlayer;
 import me.choukas.dodgecreeper.api.translation.Translator;
-import me.choukas.dodgecreeper.core.bukkit.BukkitConfiguration;
 import me.choukas.dodgecreeper.core.api.configuration.ConfigurationKeys;
 import me.choukas.dodgecreeper.core.api.configuration.ConfigurationLocationProvider;
-import me.choukas.dodgecreeper.core.api.game.spectate.SpectateManagerImpl;
+import me.choukas.dodgecreeper.core.api.game.GameRunnable;
 import me.choukas.dodgecreeper.core.api.scoreboard.ScoreboardManager;
 import me.choukas.dodgecreeper.core.api.translation.Messages;
+import me.choukas.dodgecreeper.core.bukkit.BukkitConfiguration;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -20,48 +21,60 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import javax.inject.Inject;
+import java.util.UUID;
 
 public class DeathManagerImpl implements DeathManager {
 
     private final Game game;
-    private final SpectateManagerImpl spectateManager;
+    private final SpectateManager spectateManager;
     private final DeathManagerConfiguration configuration;
     private final DeathManagerMessages messages;
+    private final GameRunnable gameRunnable;
 
     @Inject
     public DeathManagerImpl(Game game,
-                            SpectateManagerImpl spectateManager,
+                            SpectateManager spectateManager,
                             DeathManagerConfiguration configuration,
-                            DeathManagerMessages messages) {
+                            DeathManagerMessages messages,
+                            GameRunnable gameRunnable) {
         this.game = game;
         this.messages = messages;
         this.configuration = configuration;
         this.spectateManager = spectateManager;
+        this.gameRunnable = gameRunnable;
     }
 
     @Override
     public void death(Player deadPlayer) {
-        this.messages.sendDeathMessage(deadPlayer);
-
-        this.messages.broadcastDeath(deadPlayer);
-
-        DodgeCreeperPlayer deadDodgePlayer = this.game.getPlayer(deadPlayer.getUniqueId());
+        UUID deadPlayerId = deadPlayer.getUniqueId();
+        DodgeCreeperPlayer deadDodgePlayer = this.game.getPlayer(deadPlayerId);
         deadDodgePlayer.spectate();
 
-        deadPlayer.setHealth(deadPlayer.getMaxHealth());
-
         this.spectateManager.spectate(deadPlayer);
+
+        deadPlayer.setHealth(deadPlayer.getMaxHealth());
 
         Location spawnPoint = this.configuration.getDeathSpawnLocation();
         deadPlayer.teleport(spawnPoint);
 
-        if (this.game.getPlayerAmount() == 1) {
-            // Win
-            Player winner = this.game.getPlayers().get(0);
-            this.messages.sendWinMessage(winner);
+        this.messages.sendDeathMessage(deadPlayer);
+        this.messages.broadcastDeath(deadPlayer);
 
-            this.game.finish();
+        if (this.game.getPlayerAmount() > 1) {
+            // Some players remaining
+            this.messages.updateScoreboard();
+
+            return;
         }
+
+        Player winner = this.game.getPlayers().get(0);
+        this.messages.sendWinMessage(winner);
+
+        this.messages.clearScoreboard();
+
+        this.gameRunnable.cancel();
+
+        this.game.finish();
     }
 
     private static class DeathManagerConfiguration {
@@ -114,7 +127,11 @@ public class DeathManagerImpl implements DeathManager {
                         Component.translatable(Messages.DEATH_BROADCAST)
                                 .args(Component.text(deadPlayer.getDisplayName()))
                 );
+            });
+        }
 
+        public void updateScoreboard() {
+            this.game.getConnected().forEach(player -> {
                 FastBoard board = this.scoreboardManager.getScoreboard(player.getUniqueId());
                 board.updateLine(0,
                         this.translator.translate(player,
@@ -122,6 +139,13 @@ public class DeathManagerImpl implements DeathManager {
                                         .args(Component.text(this.game.getPlayerAmount()))
                         )
                 );
+            });
+        }
+
+        public void clearScoreboard() {
+            this.game.getConnected().forEach(player -> {
+                FastBoard board = this.scoreboardManager.getScoreboard(player.getUniqueId());
+                board.removeLine(0);
             });
         }
 

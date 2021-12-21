@@ -61,7 +61,7 @@ public class GameRunnable extends BukkitRunnable {
         public List<Location> getCreeperSpawnLocations() {
             return this.configuration.getList(ConfigurationKeys.CREEPER_SPAWN_LOCATIONS.getKey()).stream()
                     .map(location ->
-                            this.configurationLocationProvider.getLocation((Map<String, Object>) location)
+                            this.configurationLocationProvider.getLocation((Map<String, Number>) location)
                     ).collect(Collectors.toList());
         }
     }

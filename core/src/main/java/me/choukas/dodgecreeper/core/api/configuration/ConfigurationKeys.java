@@ -13,7 +13,7 @@ public enum ConfigurationKeys {
     CREEPER_SPAWN_LOCATIONS("creeper-spawn-locations"),
     TIMER("timer"),
     TIMER_LEVELS("levels"),
-    TIMER_PRINT("timer-print"),
+    TIMER_PRINT("print"),
     TIMER_STAYING_TIME("staying-time");
 
     private final String key;

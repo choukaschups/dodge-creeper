@@ -5,6 +5,7 @@ import com.google.inject.multibindings.Multibinder;
 import me.choukas.dodgecreeper.core.listeners.block.BlockBreakListener;
 import me.choukas.dodgecreeper.core.listeners.block.BlockPlaceListener;
 import me.choukas.dodgecreeper.core.listeners.entity.EntityDamageListener;
+import me.choukas.dodgecreeper.core.listeners.entity.EntityDeathListener;
 import me.choukas.dodgecreeper.core.listeners.entity.FoodLevelChangeListener;
 import me.choukas.dodgecreeper.core.listeners.player.PlayerInteractListener;
 import me.choukas.dodgecreeper.core.listeners.player.PlayerJoinListener;
@@ -29,6 +30,7 @@ public class ListenerModule extends AbstractModule {
         listenerBinder.addBinding().to(PlayerQuitListener.class);
 
         listenerBinder.addBinding().to(EntityDamageListener.class);
+        listenerBinder.addBinding().to(EntityDeathListener.class);
         listenerBinder.addBinding().to(FoodLevelChangeListener.class);
 
         listenerBinder.addBinding().to(ThunderChangeListener.class);

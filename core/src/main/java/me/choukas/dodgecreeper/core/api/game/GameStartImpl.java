@@ -48,6 +48,7 @@ public class GameStartImpl implements GameStart {
         Location spawnPoint = this.configuration.getStartSpawnLocation();
 
         this.game.getPlayers().forEach(player -> {
+            player.setLevel(0);
             player.teleport(spawnPoint);
             player.getInventory().setItem(1, this.pusherItem.asItemStack(player));
         });

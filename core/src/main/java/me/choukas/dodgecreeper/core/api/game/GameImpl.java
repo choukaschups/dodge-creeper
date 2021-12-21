@@ -62,8 +62,9 @@ public class GameImpl implements Game {
 
     @Override
     public List<Player> getPlayers() {
-        return this.players.keySet().stream()
-                .map(Bukkit::getPlayer)
+        return this.players.entrySet().stream()
+                .filter(entry -> entry.getValue().getType() == PlayerType.PLAYER)
+                .map(entry -> Bukkit.getPlayer(entry.getKey()))
                 .collect(Collectors.toList());
     }
 

@@ -1,5 +1,7 @@
 package me.choukas.dodgecreeper.core.listeners.player;
 
+import fr.mrmicky.fastboard.FastBoard;
+import me.choukas.dodgecreeper.api.configuration.Configuration;
 import me.choukas.dodgecreeper.api.game.autostart.AutoStartManager;
 import me.choukas.dodgecreeper.api.game.Game;
 import me.choukas.dodgecreeper.api.player.DodgeCreeperPlayer;
@@ -22,15 +24,18 @@ public class PlayerQuitListener implements Listener {
     private final Game game;
     private final AutoStartManager autoStartManager;
     private final ScoreboardManager scoreboardManager;
+    private final Configuration configuration;
     private final PlayerQuitListenerMessages messages;
 
     @Inject
     public PlayerQuitListener(Game game,
                               AutoStartManager autoStartManager,
                               ScoreboardManager scoreboardManager,
+                              Configuration configuration,
                               PlayerQuitListenerMessages messages) {
         this.game = game;
         this.autoStartManager = autoStartManager;
+        this.configuration = configuration;
         this.messages = messages;
         this.scoreboardManager = scoreboardManager;
     }
@@ -40,18 +45,23 @@ public class PlayerQuitListener implements Listener {
         event.setQuitMessage(null);
 
         Player leaver = event.getPlayer();
-        UUID uuid = leaver.getUniqueId();
-        DodgeCreeperPlayer dodgeLeaver = this.game.getPlayer(uuid);
+        UUID leaverId = leaver.getUniqueId();
+        DodgeCreeperPlayer dodgeLeaver = this.game.getPlayer(leaverId);
 
         if (dodgeLeaver.getType() == PlayerType.PLAYER) {
             if (this.game.isWaiting()) {
                 this.autoStartManager.disconnect();
+
+                if (this.game.getPlayerAmount() == this.configuration.getMinimumPlayerAmount()) {
+                    FastBoard board = this.scoreboardManager.getScoreboard(leaverId);
+                    board.removeLine(0);
+                }
             }
         }
 
-        this.game.remove(uuid);
+        this.game.remove(leaverId);
 
-        this.scoreboardManager.removeScoreboard(uuid);
+        this.scoreboardManager.removeScoreboard(leaverId);
 
         this.messages.broadcastLeave(leaver);
     }

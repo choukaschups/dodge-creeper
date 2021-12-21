@@ -26,12 +26,12 @@ public class ConfigurationLocationProvider {
         return new Location(this.worldManager.getWorld(), x, y, z, yaw, pitch);
     }
 
-    public Location getLocation(Map<String, Object> location) {
-        double x = (double) location.get("x");
-        double y = (double) location.get("y");
-        double z = (double) location.get("z");
-        float yaw = (float) location.get("yaw");
-        float pitch = (float) location.get("pitch");
+    public Location getLocation(Map<String, Number> location) {
+        double x = location.get("x").doubleValue();
+        double y = location.get("y").doubleValue();
+        double z = location.get("z").doubleValue();
+        float yaw = location.get("yaw").floatValue();
+        float pitch = location.get("pitch").floatValue();
 
         return new Location(this.worldManager.getWorld(), x, y, z, yaw, pitch);
     }

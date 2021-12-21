@@ -28,15 +28,14 @@ public class PusherItem {
 
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(
-                this.translator.translate(
-                        owner,
+                this.translator.translate(owner,
                         Component.translatable(Messages.PUSHER_NAME)
                 )
         );
         itemMeta.addEnchant(Enchantment.KNOCKBACK, 5, true);
         itemStack.setItemMeta(itemMeta);
 
-        itemStack = NBTEditor.set(itemStack, owner.getUniqueId(), OWNER_NBT_TAG);
+        itemStack = NBTEditor.set(itemStack, owner.getUniqueId().toString(), OWNER_NBT_TAG);
 
         return itemStack;
     }

@@ -1,6 +1,5 @@
 package me.choukas.dodgecreeper.api.configuration;
 
-import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.Optional;

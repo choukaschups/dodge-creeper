@@ -49,13 +49,6 @@ public class AutoStartManagerImpl implements AutoStartManager {
     public void disconnect() {
         if (this.game.getPlayerAmount() == this.configuration.getMinimumPlayerAmount()) {
             this.autoStartRunnable.cancel();
-
-            this.game.getPlayers().forEach(player -> {
-                player.setLevel(0);
-                player.resetTitle();
-
-                // TODO Reset scoreboard
-            });
         }
     }
 }

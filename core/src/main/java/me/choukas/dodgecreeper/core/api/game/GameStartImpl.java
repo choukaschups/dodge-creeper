@@ -49,7 +49,7 @@ public class GameStartImpl implements GameStart {
         Location spawnPoint = this.configuration.getStartSpawnLocation();
 
         this.game.getPlayers().forEach(player -> {
-            player.setLevel(0);
+            // player.setLevel(0);
             player.teleport(spawnPoint);
             player.getInventory().setItem(0, this.pusherItem.asItemStack(player));
             player.setAllowFlight(true); // Double jumps

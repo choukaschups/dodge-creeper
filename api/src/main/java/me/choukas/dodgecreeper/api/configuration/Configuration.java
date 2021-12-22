@@ -26,4 +26,6 @@ public interface Configuration {
     int getHeightLimit();
 
     int getDoubleJumpsAmount();
+
+    int getMinimumTimerLevel();
 }

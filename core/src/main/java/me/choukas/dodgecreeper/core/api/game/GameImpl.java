@@ -45,7 +45,7 @@ public class GameImpl implements Game {
 
     @Override
     public void addPlayer(Player player, int doubleJumps) {
-        this.players.put(player.getUniqueId(), new DodgeCreeperPlayerImpl(PlayerType.PLAYER, doubleJumps));
+        this.players.put(player.getUniqueId(), new DodgeCreeperPlayerImpl(player.getUniqueId(), PlayerType.PLAYER, doubleJumps));
     }
 
     @Override
@@ -72,7 +72,7 @@ public class GameImpl implements Game {
 
     @Override
     public void addSpectator(Player player) {
-        this.players.put(player.getUniqueId(), new DodgeCreeperPlayerImpl(PlayerType.SPECTATOR, 0));
+        this.players.put(player.getUniqueId(), new DodgeCreeperPlayerImpl(player.getUniqueId(), PlayerType.SPECTATOR, 0));
     }
 
     @Override

@@ -2,12 +2,6 @@
 on le met dans une queue et si une personne quitte il peut devenir joueur
 => MAIS mieux si carrément on ne l'autorise pas à rejoindre la partie si c'est plein
 
-- DOUBLE JUMP
-
-- SEPARER POUR AVOIR 4 FIELDS MAXIMUM
-
-- API DE CONFIGURATION AVEC MÉTHODES
-
 AutoStartManager
 // Précond : Partie pas encore lancée, partie pas encore pleine, joueur déjà ajouté
         // 1) Si le nombre de joueurs a atteint le minimum, on lance le timer
@@ -23,8 +17,14 @@ AutoStartManager
 Éventuellement téléporter si le joueur tombe et que le jeu est en attente ou finit
 (PlayerMoveListener)
 
-TODO Fix scoreboards on player quit
+Ajouter de nouvelles méthodes pour éviter d'avoir à passer uuid (player bon aussi)
 
 BUGS POSSIBLES :
 - Si dans la config il n'a pas de double jumps, le joueur pourra quand même faire un petit saut avant que l'event soit vide annulé
 Correction : tester si le nombre de sauts est supérieur à 0 dans le game start
+
+- On peut encore double jump après que la partie soit finie
+
+TAB_LIST
+Ajouter nombre de double jumps restants dans l'action bar
+Instances : tester + commandes

@@ -47,20 +47,22 @@ public class DeathManagerImpl implements DeathManager {
 
     @Override
     public void death(Player deadPlayer, DeathCause cause) {
-        UUID deadPlayerId = deadPlayer.getUniqueId();
-        DodgeCreeperPlayer deadDodgePlayer = this.game.getPlayer(deadPlayerId);
+        if (cause != DeathCause.LEAVE) {
+            UUID deadPlayerId = deadPlayer.getUniqueId();
+            DodgeCreeperPlayer deadDodgePlayer = this.game.getPlayer(deadPlayerId);
 
-        deadDodgePlayer.spectate();
-        this.spectateManager.spectate(deadPlayer);
+            deadDodgePlayer.spectate();
+            this.spectateManager.spectate(deadPlayer);
 
-        deadPlayer.setHealth(deadPlayer.getMaxHealth());
-        deadPlayer.getInventory().clear();
+            deadPlayer.setHealth(deadPlayer.getMaxHealth());
+            deadPlayer.getInventory().clear();
 
-        Location spawnPoint = this.configuration.getDeathSpawnLocation();
-        deadPlayer.teleport(spawnPoint);
+            Location spawnPoint = this.configuration.getDeathSpawnLocation();
+            deadPlayer.teleport(spawnPoint);
 
-        this.messages.sendDeathMessage(deadPlayer);
-        this.messages.broadcastDeath(deadPlayer);
+            this.messages.sendDeathMessage(deadPlayer);
+            this.messages.broadcastDeath(deadPlayer);
+        }
 
         if (this.game.getPlayerAmount() > 1) {
             // Some players remaining

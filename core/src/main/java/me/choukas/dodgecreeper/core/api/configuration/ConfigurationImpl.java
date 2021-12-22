@@ -87,6 +87,12 @@ public class ConfigurationImpl implements Configuration {
         return this.configuration.getInt(ConfigurationKeys.DOUBLE_JUMPS_AMOUNT.getKey());
     }
 
+    @Override
+    public int getMinimumTimerLevel() {
+        // TODO Maybe return optional here
+        return this.getTimerLevel(this.getMinimumPlayerAmount()).orElseThrow(RuntimeException::new);
+    }
+
     private ConfigurationSection getTimerSection() {
         return this.configuration.getConfigurationSection(ConfigurationKeys.TIMER.getKey());
     }

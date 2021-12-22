@@ -21,7 +21,10 @@ public enum TranslationKeys implements Translatable {
     DEATH_TITLE("death-title"),
     DEATH_BROADCAST("death-broadcast"),
     WIN("win"),
-    GAME_WAITING_START_TIMER_MESSAGE("game-waiting-start-timer-message");
+    GAME_WAITING_START_TIMER_MESSAGE("game-waiting-start-timer-message"),
+    REMAINING_DOUBLE_JUMPS_AMOUNT("remaining-double-jumps-amount"),
+    TAB_LIST_HEADER("tab-list-header"),
+    TAB_LIST_FOOTER("tab-list-footer");
 
     private final String key;
 

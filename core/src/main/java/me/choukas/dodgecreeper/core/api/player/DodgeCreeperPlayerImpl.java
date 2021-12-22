@@ -3,14 +3,23 @@ package me.choukas.dodgecreeper.core.api.player;
 import me.choukas.dodgecreeper.api.player.DodgeCreeperPlayer;
 import me.choukas.dodgecreeper.api.player.PlayerType;
 
+import java.util.UUID;
+
 public class DodgeCreeperPlayerImpl implements DodgeCreeperPlayer {
 
+    private final UUID id;
     private PlayerType type;
     private int doubleJumps;
 
-    public DodgeCreeperPlayerImpl(PlayerType type, int doubleJumps) {
+    public DodgeCreeperPlayerImpl(UUID id, PlayerType type, int doubleJumps) {
+        this.id = id;
         this.type = type;
         this.doubleJumps = doubleJumps;
+    }
+
+    @Override
+    public UUID getUniqueId() {
+        return this.id;
     }
 
     @Override

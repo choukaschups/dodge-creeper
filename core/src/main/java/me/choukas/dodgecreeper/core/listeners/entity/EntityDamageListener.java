@@ -33,6 +33,12 @@ public class EntityDamageListener implements Listener {
                 return;
             }
 
+            if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                event.setCancelled(true);
+
+                return;
+            }
+
             Player damaged = (Player) event.getEntity();
             if (damaged.getHealth() - event.getDamage() <= 0) {
                 this.deathManager.death(damaged, DeathCause.EXPLOSION);

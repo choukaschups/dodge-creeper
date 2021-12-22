@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 public class AutoStartRunnable extends BukkitRunnable {
 
+    private final Game game;
     private final Configuration configuration;
     private final GameStart gameStart;
     private final AutoStartMessages messages;
@@ -29,9 +30,11 @@ public class AutoStartRunnable extends BukkitRunnable {
     private int timer;
 
     @Inject
-    public AutoStartRunnable(Configuration configuration,
+    public AutoStartRunnable(Game game,
+                             Configuration configuration,
                              GameStart gameStart,
                              AutoStartMessages messages) {
+        this.game = game;
         this.configuration = configuration;
         this.messages = messages;
         this.gameStart = gameStart;
@@ -41,7 +44,13 @@ public class AutoStartRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (timer == 0) {
+        this.game.getConnected().forEach(player -> {
+                    player.setLevel(this.timer);
+                    player.setExp((float) this.timer / (float) configuration.getMinimumTimerLevel());
+                }
+        );
+
+        if (this.timer == 0) {
             this.cancel();
 
             this.gameStart.start();
@@ -87,8 +96,6 @@ public class AutoStartRunnable extends BukkitRunnable {
 
         public void broadcastTimer(int timer) {
             this.game.getConnected().forEach(player -> {
-                player.setLevel(timer);
-
                 FastBoard board = this.scoreboardManager.getScoreboard(player.getUniqueId());
                 board.updateLine(0, "");
                 board.updateLine(1,
@@ -105,7 +112,7 @@ public class AutoStartRunnable extends BukkitRunnable {
                 board.updateLine(3,
                         this.translator.translate(player,
                                 Component.translatable(TranslationKeys.SERVER_IP))
-                        );
+                );
             });
         }
 

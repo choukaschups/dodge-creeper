@@ -33,7 +33,7 @@ public class QuitManagerImpl implements QuitManager {
 
     @Override
     public void quit(Player player) {
-        this.quitSaver.save(player);
+        this.quitSaver.save(player); // TODO We could move this after executing quit state to avoid exception on player's leave
         this.messages.broadcastLeave(player);
 
         /*if (dodgeLeaver.isSpectator()) {

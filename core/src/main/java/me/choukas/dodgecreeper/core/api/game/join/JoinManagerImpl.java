@@ -9,6 +9,8 @@ import me.choukas.dodgecreeper.core.api.game.join.state.JoinState;
 import me.choukas.dodgecreeper.core.api.game.join.state.JoinStateProvider;
 import me.choukas.dodgecreeper.core.api.scoreboard.ScoreboardManager;
 import me.choukas.dodgecreeper.core.api.translation.TranslationKeys;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 
@@ -21,19 +23,19 @@ public class JoinManagerImpl implements JoinManager {
     private final JoinInitializer joinInitializer;
     private final JoinStateProvider joinStateProvider;
     private final Configuration configuration;
-    private final Scoreboards scoreboards;
+    private final Display display;
 
     @Inject
     public JoinManagerImpl(Game game,
                            JoinInitializer joinInitializer,
                            JoinStateProvider joinStateProvider,
                            Configuration configuration,
-                           Scoreboards scoreboards) {
+                           Display display) {
         this.game = game;
         this.joinStateProvider = joinStateProvider;
         this.joinInitializer = joinInitializer;
         this.configuration = configuration;
-        this.scoreboards = scoreboards;
+        this.display = display;
     }
 
     @Override
@@ -41,11 +43,51 @@ public class JoinManagerImpl implements JoinManager {
         this.joinInitializer.init(player);
 
         if (this.game.getPlayerAmount() < this.configuration.getMinimumPlayerAmount()) {
-            this.scoreboards.displayDefaultScoreboard(player);
+            this.display.scoreboards().displayDefaultScoreboard(player);
         }
+
+        this.display.messages().displayTabList(player);
 
         JoinState joinState = this.joinStateProvider.provide(this.game.getState());
         joinState.join(player);
+    }
+
+    private static class Display {
+
+        private final Messages messages;
+        private final Scoreboards scoreboards;
+
+        @Inject
+        public Display(Messages messages, Scoreboards scoreboards) {
+            this.messages = messages;
+            this.scoreboards = scoreboards;
+        }
+
+        public Messages messages() {
+            return messages;
+        }
+
+        public Scoreboards scoreboards() {
+            return scoreboards;
+        }
+    }
+
+    private static class Messages {
+
+        private final BukkitAudiences audiences;
+
+        @Inject
+        public Messages(BukkitAudiences audiences) {
+            this.audiences = audiences;
+        }
+
+        public void displayTabList(Player player) {
+            Audience audience = this.audiences.player(player);
+            audience.sendPlayerListHeaderAndFooter(
+                    Component.translatable(TranslationKeys.TAB_LIST_HEADER),
+                    Component.translatable(TranslationKeys.TAB_LIST_FOOTER)
+            );
+        }
     }
 
     private static class Scoreboards {

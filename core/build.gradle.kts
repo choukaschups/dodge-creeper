@@ -61,12 +61,6 @@ spigot {
     }
 }
 
-tasks.buildTools {
-    mavenPath = "/usr/local/bin/mvn"
-    versions("1.8")
-    workDir = file("/Users/Juan/dodge-creeper/")
-}
-
 tasks.processResources {
     finalizedBy("spigotPlugin")
 }

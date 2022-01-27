@@ -30,6 +30,7 @@ public class JoinInitializer {
         player.getInventory().clear();
 
         player.setLevel(0);
+        player.setExp(0.f);
 
         player.setFoodLevel(DEFAULT_FOOD_LEVEL);
 

@@ -42,8 +42,10 @@ public class QuitWaitingState implements QuitState {
 
         if (this.game.getPlayerAmount() + 1 == this.configuration.getMinimumPlayerAmount()) {
             // The game cannot start anymore
-            this.game.getConnected().forEach(player ->
-                    player.setLevel(0)
+            this.game.getConnected().forEach(player -> {
+                        player.setLevel(0);
+                        player.setExp(0.f);
+                    }
             );
 
             this.autoStartManager.stop();
